@@ -608,17 +608,23 @@ if st.session_state.show_history:
             st.info("No calculations yet.")
 
 
+
+
 # ============================================================
 # DEG / RAD + MEMORY
 # ============================================================
 
 mode_col, inv_col, mc_col, mr_col, mp_col, mm_col = st.columns(6)
 
+# ------------------------------------------------------------
+# DEG / RAD
+# ------------------------------------------------------------
+
 with mode_col:
 
     if st.button(
         st.session_state.angle_mode,
-        key="angle_mode"
+        key="angle_mode_button"
     ):
 
         if st.session_state.angle_mode == "DEG":
@@ -628,12 +634,18 @@ with mode_col:
 
         st.rerun()
 
+
+# ------------------------------------------------------------
+# INV
+# ------------------------------------------------------------
+
 with inv_col:
 
+    inv_label = "INV" if not st.session_state.inverse else "INV ✓"
+
     if st.button(
-        "INV" if not st.session_state.inverse
-        else "INV✓",
-        key="inverse"
+        inv_label,
+        key="inverse_button"
     ):
 
         st.session_state.inverse = (
@@ -642,42 +654,82 @@ with inv_col:
 
         st.rerun()
 
+
+# ------------------------------------------------------------
+# MEMORY CLEAR
+# ------------------------------------------------------------
+
 with mc_col:
 
-    if st.button("MC", key="mc"):
+    if st.button(
+        "MC",
+        key="memory_clear_button"
+    ):
+
         st.session_state.memory = 0
+
+
+# ------------------------------------------------------------
+# MEMORY RECALL
+# ------------------------------------------------------------
 
 with mr_col:
 
-    if st.button("MR", key="mr"):
+    if st.button(
+        "MR",
+        key="memory_recall_button"
+    ):
+
         add_text(str(st.session_state.memory))
+
+        st.rerun()
+
+
+# ------------------------------------------------------------
+# MEMORY ADD
+# ------------------------------------------------------------
 
 with mp_col:
 
-    if st.button("M+", key="mplus"):
+    if st.button(
+        "M+",
+        key="memory_add_button"
+    ):
 
         try:
+
             value = calculate_expression(
                 st.session_state.expression
             )
 
             st.session_state.memory += float(value)
 
-        except:
+        except Exception:
+
             pass
+
+
+# ------------------------------------------------------------
+# MEMORY SUBTRACT
+# ------------------------------------------------------------
 
 with mm_col:
 
-    if st.button("M-", key="mminus"):
+    if st.button(
+        "M-",
+        key="memory_subtract_button"
+    ):
 
         try:
+
             value = calculate_expression(
                 st.session_state.expression
             )
 
             st.session_state.memory -= float(value)
 
-        except:
+        except Exception:
+
             pass
 
 
