@@ -696,7 +696,7 @@ with mode_columns[0]:
 
     if st.button(
         st.session_state.angle_mode,
-        key="angle_mode"
+        key="angle_mode_btn"
     ):
 
         if st.session_state.angle_mode == "DEG":
@@ -718,7 +718,7 @@ with mode_columns[1]:
 
     if st.button(
         inv_text,
-        key="inverse"
+        key="inverse_btn"
     ):
 
         st.session_state.inverse = (
