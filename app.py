@@ -23,6 +23,10 @@ st.set_page_config(
 st.markdown("""
 <style>
 
+/* ==========================================================
+   REMOVE STREAMLIT DEFAULT UI
+   ========================================================== */
+
 #MainMenu {
     visibility: hidden;
 }
@@ -35,115 +39,89 @@ header {
     visibility: hidden;
 }
 
+
+/* ==========================================================
+   APP BACKGROUND
+   ========================================================== */
+
 .stApp {
     background: #ffffff;
 }
 
-/* Main calculator */
+
+/* ==========================================================
+   MAIN CALCULATOR
+   ========================================================== */
+
 .calculator {
+    width: 100%;
     max-width: 720px;
-    margin: auto;
+    margin: 0 auto;
+    padding: 0;
 }
 
-/* Display */
+
+/* ==========================================================
+   DISPLAY
+   ========================================================== */
+
 .display-box {
     border: 1px solid #d1d5db;
-    border-radius: 22px;
-    padding: 10px 18px;
-    margin-bottom: 8px;
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin-bottom: 7px;
     background: white;
 }
 
 .display-expression {
     text-align: right;
-    font-size: 20px;
-    min-height: 30px;
+    font-size: 19px;
+    min-height: 27px;
+    line-height: 27px;
     color: #4b5563;
-    overflow-x: auto;
+    overflow: hidden;
     white-space: nowrap;
 }
 
 .display-result {
     text-align: right;
-    font-size: 36px;
-    min-height: 45px;
+    font-size: 34px;
+    min-height: 43px;
+    line-height: 43px;
     color: #111827;
-    overflow-x: auto;
+    overflow: hidden;
     white-space: nowrap;
 }
 
-/* History button */
-.history-icon {
-    text-align: left;
-    font-size: 22px;
-    color: #4b5563;
-}
 
-/* Streamlit calculator buttons */
-.stButton > button {
-    width: 100%;
-    min-width: 42px;
-    height: 48px;
-    padding: 0;
-    border-radius: 25px;
-    border: none;
-    font-size: 15px;
-    background-color: #f1f3f4;
-    color: #111827;
-    white-space: nowrap;
-}
+/* ==========================================================
+   STREAMLIT BUTTONS
+   ========================================================== */
 
 .stButton {
     width: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
-/* Calculator grid */
-.calculator-grid {
+.stButton > button {
     width: 100%;
-    overflow-x: auto;
-}
+    height: 45px;
+    min-height: 45px;
+    padding: 0 !important;
+    margin: 0 !important;
 
-/* Keep calculator columns together */
-.calculator-grid [data-testid="column"] {
-    min-width: 42px !important;
-}
+    border-radius: 23px;
+    border: none;
 
-/* Mobile */
-@media (max-width: 640px) {
+    font-size: 14px;
+    font-weight: 500;
 
-    .calculator {
-        width: 100%;
-        max-width: 100%;
-        padding: 0;
-    }
+    background-color: #f1f3f4;
+    color: #111827;
 
-    .display-box {
-        border-radius: 18px;
-        padding: 8px 12px;
-    }
-
-    .display-result {
-        font-size: 30px;
-    }
-
-    .display-expression {
-        font-size: 17px;
-    }
-
-    .stButton > button {
-        min-width: 40px;
-        height: 44px;
-        font-size: 13px;
-    }
-
-    .calculator-grid {
-        width: 100%;
-        overflow-x: hidden;
-    }
-
-    .calculator-grid [data-testid="column"] {
-        min-width: 0 !important;
-    }
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .stButton > button:hover {
@@ -151,48 +129,310 @@ header {
     background-color: #e5e7eb;
 }
 
-/* Scientific buttons */
+
+/* ==========================================================
+   ALL HORIZONTAL BLOCKS
+   ========================================================== */
+
+[data-testid="stHorizontalBlock"] {
+    gap: 5px !important;
+    margin-bottom: 5px !important;
+    padding: 0 !important;
+}
+
+
+/* ==========================================================
+   COLUMNS
+   ========================================================== */
+
+[data-testid="column"] {
+    padding: 0 !important;
+    margin: 0 !important;
+    min-width: 0 !important;
+}
+
+
+/* ==========================================================
+   DISPLAY TOP ROW
+   ========================================================== */
+
+.display-box [data-testid="stHorizontalBlock"] {
+    gap: 5px !important;
+}
+
+
+/* ==========================================================
+   DEG / INV / MEMORY BUTTONS
+   ========================================================== */
+
+.mode-row {
+    margin-top: 2px;
+    margin-bottom: 5px;
+}
+
+.mode-row .stButton > button {
+    height: 38px;
+    min-height: 38px;
+    border-radius: 19px;
+    font-size: 12px;
+    padding: 0 !important;
+}
+
+
+/* ==========================================================
+   MAIN CALCULATOR GRID
+   ========================================================== */
+
+.calculator-grid {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+
+/* Main calculator rows */
+
+.calculator-grid [data-testid="stHorizontalBlock"] {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+
+    gap: 4px !important;
+    margin-bottom: 4px !important;
+}
+
+
+/* Main calculator columns */
+
+.calculator-grid [data-testid="column"] {
+    flex: 1 1 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+}
+
+
+/* Main calculator buttons */
+
+.calculator-grid .stButton > button {
+    width: 100%;
+    height: 45px;
+    min-height: 45px;
+
+    border-radius: 22px;
+
+    font-size: 14px;
+    padding: 0 !important;
+}
+
+
+/* ==========================================================
+   SCIENTIFIC / OPERATOR BUTTONS
+   ========================================================== */
+
 .scientific-btn .stButton > button {
     background-color: #e7eefc;
 }
 
-/* Equals button */
+.operator-btn .stButton > button {
+    background-color: #e7eefc;
+}
+
 .equals-btn .stButton > button {
     background-color: #3478f6;
     color: white;
 }
 
-/* Operator buttons */
-.operator-btn .stButton > button {
-    background-color: #e7eefc;
-}
 
-/* Mode */
-.mode-active .stButton > button {
-    background-color: #3478f6;
-    color: white;
-}
+/* ==========================================================
+   HISTORY
+   ========================================================== */
 
-/* History cards */
 .history-card {
-    padding: 10px 12px;
+    padding: 7px 10px;
     border-bottom: 1px solid #eeeeee;
-    cursor: pointer;
 }
 
 .history-expression {
     color: #6b7280;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .history-result {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 600;
 }
 
-/* More functions */
+
+/* ==========================================================
+   MORE FUNCTIONS
+   ========================================================== */
+
 .more-box {
-    margin-top: 10px;
+    margin-top: 5px;
+}
+
+
+/* ==========================================================
+   DIVIDERS
+   ========================================================== */
+
+hr {
+    margin: 7px 0 !important;
+}
+
+
+/* ==========================================================
+   CAPTIONS
+   ========================================================== */
+
+.stCaption {
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
+}
+
+
+/* ==========================================================
+   MOBILE RESPONSIVE DESIGN
+   ========================================================== */
+
+@media (max-width: 640px) {
+
+    .calculator {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+
+
+    /* Display */
+
+    .display-box {
+        border-radius: 17px;
+        padding: 6px 10px;
+        margin-bottom: 5px;
+    }
+
+    .display-expression {
+        font-size: 15px;
+        min-height: 23px;
+        line-height: 23px;
+    }
+
+    .display-result {
+        font-size: 28px;
+        min-height: 36px;
+        line-height: 36px;
+    }
+
+
+    /* Every horizontal group */
+
+    [data-testid="stHorizontalBlock"] {
+        gap: 3px !important;
+        margin-bottom: 3px !important;
+    }
+
+
+    /* Buttons */
+
+    .stButton > button {
+        height: 39px;
+        min-height: 39px;
+        border-radius: 20px;
+        font-size: 12px;
+    }
+
+
+    /* DEG / INV / MEMORY */
+
+    .mode-row .stButton > button {
+        height: 34px;
+        min-height: 34px;
+        border-radius: 17px;
+        font-size: 10px;
+    }
+
+
+    /* Main calculator */
+
+    .calculator-grid [data-testid="stHorizontalBlock"] {
+        gap: 3px !important;
+        margin-bottom: 3px !important;
+    }
+
+    .calculator-grid .stButton > button {
+        height: 39px;
+        min-height: 39px;
+        border-radius: 20px;
+        font-size: 12px;
+    }
+
+
+    /* More functions */
+
+    .more-box .stButton > button {
+        height: 36px;
+        min-height: 36px;
+        font-size: 11px;
+    }
+
+
+    /* Reduce expander spacing */
+
+    [data-testid="stExpander"] {
+        margin-top: 3px !important;
+        margin-bottom: 3px !important;
+    }
+}
+
+
+/* ==========================================================
+   VERY SMALL PHONES
+   ========================================================== */
+
+@media (max-width: 380px) {
+
+    .calculator {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+
+    [data-testid="stHorizontalBlock"] {
+        gap: 2px !important;
+        margin-bottom: 2px !important;
+    }
+
+    .stButton > button {
+        height: 36px;
+        min-height: 36px;
+        font-size: 10px;
+        border-radius: 18px;
+    }
+
+    .mode-row .stButton > button {
+        height: 31px;
+        min-height: 31px;
+        font-size: 9px;
+    }
+
+    .calculator-grid [data-testid="stHorizontalBlock"] {
+        gap: 2px !important;
+        margin-bottom: 2px !important;
+    }
+
+    .calculator-grid .stButton > button {
+        height: 36px;
+        min-height: 36px;
+        font-size: 10px;
+        border-radius: 18px;
+    }
+
+    .display-result {
+        font-size: 25px;
+    }
 }
 
 </style>
@@ -216,6 +456,7 @@ defaults = {
 }
 
 for key, value in defaults.items():
+
     if key not in st.session_state:
         st.session_state[key] = value
 
@@ -225,27 +466,35 @@ for key, value in defaults.items():
 # ============================================================
 
 def factorial_value(value):
+
     """Calculate factorial safely."""
 
     if value < 0:
         raise ValueError("Invalid factorial")
 
     if not float(value).is_integer():
-        raise ValueError("Factorial requires a whole number")
+        raise ValueError(
+            "Factorial requires a whole number"
+        )
 
     if value > 170:
-        raise ValueError("Number is too large for factorial")
+        raise ValueError(
+            "Number is too large for factorial"
+        )
 
     return math.factorial(int(value))
 
 
 def safe_float(value):
+
     """Convert result to a clean float."""
 
     value = float(value)
 
     if not math.isfinite(value):
-        raise ValueError("Invalid mathematical result")
+        raise ValueError(
+            "Invalid mathematical result"
+        )
 
     return value
 
@@ -255,27 +504,42 @@ def safe_float(value):
 # ============================================================
 
 def prepare_expression(expression):
+
     """
-    Convert calculator symbols into SymPy-compatible syntax.
+    Convert calculator symbols into
+    SymPy-compatible syntax.
     """
 
     expr = expression
 
-    # Multiplication symbol
+    # Multiplication
     expr = expr.replace("×", "*")
 
-    # Division symbol
+    # Division
     expr = expr.replace("÷", "/")
 
     # Power
     expr = expr.replace("^", "**")
 
     # Constants
-    expr = re.sub(r"\bπ\b", "pi", expr)
-    expr = re.sub(r"\be\b", "E", expr)
+    expr = re.sub(
+        r"\bπ\b",
+        "pi",
+        expr
+    )
+
+    expr = re.sub(
+        r"\be\b",
+        "E",
+        expr
+    )
 
     # Ans
-    expr = re.sub(r"\bAns\b", f"({st.session_state.ans})", expr)
+    expr = re.sub(
+        r"\bAns\b",
+        f"({st.session_state.ans})",
+        expr
+    )
 
     # Percentage
     expr = re.sub(
@@ -292,6 +556,7 @@ def prepare_expression(expression):
 # ============================================================
 
 def calculate_expression(expression):
+
     """
     Safely calculate an expression using SymPy.
     """
@@ -301,14 +566,27 @@ def calculate_expression(expression):
 
     try:
 
-        expr = prepare_expression(expression)
+        expr = prepare_expression(
+            expression
+        )
 
-        # Replace factorial symbol
-        factorial_pattern = r"(\d+(?:\.\d+)?)!"
+        # ----------------------------------------------------
+        # FACTORIAL
+        # ----------------------------------------------------
+
+        factorial_pattern = (
+            r"(\d+(?:\.\d+)?)!"
+        )
 
         def factorial_replace(match):
-            number = float(match.group(1))
-            return str(factorial_value(number))
+
+            number = float(
+                match.group(1)
+            )
+
+            return str(
+                factorial_value(number)
+            )
 
         expr = re.sub(
             factorial_pattern,
@@ -316,54 +594,105 @@ def calculate_expression(expression):
             expr
         )
 
-        # Allowed mathematical names
+        # ----------------------------------------------------
+        # ALLOWED MATHEMATICAL FUNCTIONS
+        # ----------------------------------------------------
+
         allowed = {
-    "pi": sp.pi,
-    "E": sp.E,
-    "sqrt": sp.sqrt,
-    "sin": sp.sin,
-    "cos": sp.cos,
-    "tan": sp.tan,
-    "asin": sp.asin,
-    "acos": sp.acos,
-    "atan": sp.atan,
-    "sinh": sp.sinh,
-    "cosh": sp.cosh,
-    "tanh": sp.tanh,
-    "log": sp.log,
-    "log10": sp.log,
-    "log2": lambda x: sp.log(x, 2),
-    "Abs": sp.Abs,
-    "floor": sp.floor,
-    "ceiling": sp.ceiling,
-    "real_root": sp.real_root,
-}
-        # Degree mode conversion
+
+            "pi": sp.pi,
+
+            "E": sp.E,
+
+            "sqrt": sp.sqrt,
+
+            "sin": sp.sin,
+
+            "cos": sp.cos,
+
+            "tan": sp.tan,
+
+            "asin": sp.asin,
+
+            "acos": sp.acos,
+
+            "atan": sp.atan,
+
+            "sinh": sp.sinh,
+
+            "cosh": sp.cosh,
+
+            "tanh": sp.tanh,
+
+            "log": sp.log,
+
+            "log10": sp.log,
+
+            "log2": lambda x:
+                sp.log(x, 2),
+
+            "Abs": sp.Abs,
+
+            "floor": sp.floor,
+
+            "ceiling": sp.ceiling,
+
+            "real_root": sp.real_root,
+        }
+
+
+        # ----------------------------------------------------
+        # DEGREE MODE
+        # ----------------------------------------------------
+
         if st.session_state.angle_mode == "DEG":
 
-            allowed["sin"] = lambda x: sp.sin(
-                sp.pi * x / 180
+            allowed["sin"] = (
+                lambda x:
+                sp.sin(
+                    sp.pi * x / 180
+                )
             )
 
-            allowed["cos"] = lambda x: sp.cos(
-                sp.pi * x / 180
+            allowed["cos"] = (
+                lambda x:
+                sp.cos(
+                    sp.pi * x / 180
+                )
             )
 
-            allowed["tan"] = lambda x: sp.tan(
-                sp.pi * x / 180
+            allowed["tan"] = (
+                lambda x:
+                sp.tan(
+                    sp.pi * x / 180
+                )
             )
 
-            allowed["asin"] = lambda x: (
-                sp.asin(x) * 180 / sp.pi
+            allowed["asin"] = (
+                lambda x:
+                sp.asin(x)
+                * 180
+                / sp.pi
             )
 
-            allowed["acos"] = lambda x: (
-                sp.acos(x) * 180 / sp.pi
+            allowed["acos"] = (
+                lambda x:
+                sp.acos(x)
+                * 180
+                / sp.pi
             )
 
-            allowed["atan"] = lambda x: (
-                sp.atan(x) * 180 / sp.pi
+            allowed["atan"] = (
+                lambda x:
+                sp.atan(x)
+                * 180
+                / sp.pi
             )
+
+
+        # ----------------------------------------------------
+        # SYMPIFY
+        # ----------------------------------------------------
 
         result = sp.sympify(
             expr,
@@ -372,47 +701,86 @@ def calculate_expression(expression):
 
         result = sp.N(result)
 
-        # Check invalid result
-        if result.has(sp.zoo, sp.oo, -sp.oo, sp.nan):
-            raise ValueError("Invalid mathematical result")
+
+        # ----------------------------------------------------
+        # INVALID RESULTS
+        # ----------------------------------------------------
+
+        if result.has(
+            sp.zoo,
+            sp.oo,
+            -sp.oo,
+            sp.nan
+        ):
+
+            raise ValueError(
+                "Invalid mathematical result"
+            )
+
 
         result = float(result)
 
-        if not math.isfinite(result):
-            raise ValueError("Invalid mathematical result")
 
-        # Remove unnecessary .0
+        if not math.isfinite(result):
+
+            raise ValueError(
+                "Invalid mathematical result"
+            )
+
+
+        # ----------------------------------------------------
+        # CLEAN RESULT
+        # ----------------------------------------------------
+
         if result.is_integer():
-            return str(int(result))
+
+            return str(
+                int(result)
+            )
 
         return f"{result:.12g}"
 
+
     except ZeroDivisionError:
-        raise ValueError("Cannot divide by zero")
+
+        raise ValueError(
+            "Cannot divide by zero"
+        )
+
 
     except ValueError as error:
+
         raise error
 
+
     except Exception:
-        raise ValueError("Invalid expression")
+
+        raise ValueError(
+            "Invalid expression"
+        )
 
 
 # ============================================================
-# ADD TO EXPRESSION
+# ADD TEXT
 # ============================================================
 
 def add_text(text):
+
     st.session_state.expression += text
+
     st.session_state.error = ""
 
 
 # ============================================================
-# CLEAR
+# CLEAR ALL
 # ============================================================
 
 def clear_all():
+
     st.session_state.expression = ""
+
     st.session_state.result = "0"
+
     st.session_state.error = ""
 
 
@@ -421,9 +789,11 @@ def clear_all():
 # ============================================================
 
 def delete_last():
+
     st.session_state.expression = (
         st.session_state.expression[:-1]
     )
+
     st.session_state.error = ""
 
 
@@ -433,23 +803,37 @@ def delete_last():
 
 def calculate():
 
-    expression = st.session_state.expression
+    expression = (
+        st.session_state.expression
+    )
 
     if not expression:
+
         return
 
     try:
 
-        result = calculate_expression(expression)
+        result = calculate_expression(
+            expression
+        )
 
         st.session_state.result = result
 
         try:
-            st.session_state.ans = float(result)
-        except:
+
+            st.session_state.ans = float(
+                result
+            )
+
+        except Exception:
+
             st.session_state.ans = 0
 
-        # Add history
+
+        # ----------------------------------------------------
+        # HISTORY
+        # ----------------------------------------------------
+
         st.session_state.history.insert(
             0,
             {
@@ -458,30 +842,42 @@ def calculate():
             }
         )
 
-        # Keep last 20 calculations
+
+        # Keep only last 20
         st.session_state.history = (
             st.session_state.history[:20]
         )
 
         st.session_state.error = ""
 
+
     except ValueError as error:
 
-        st.session_state.error = str(error)
+        st.session_state.error = str(
+            error
+        )
+
         st.session_state.result = "Error"
 
 
 # ============================================================
-# SCIENTIFIC FUNCTION
+# SCIENTIFIC FUNCTIONS
 # ============================================================
 
 def add_function(function):
 
+    # --------------------------------------------------------
+    # INVERSE FUNCTIONS
+    # --------------------------------------------------------
+
     if st.session_state.inverse:
 
         inverse_functions = {
+
             "sin": "asin",
+
             "cos": "acos",
+
             "tan": "atan"
         }
 
@@ -490,19 +886,41 @@ def add_function(function):
             function
         )
 
+
+    # --------------------------------------------------------
+    # FUNCTIONS
+    # --------------------------------------------------------
+
     if function == "sqrt":
-        add_text("sqrt(")
+
+        add_text(
+            "sqrt("
+        )
+
 
     elif function == "ln":
-        add_text("log(")
+
+        add_text(
+            "log("
+        )
+
 
     elif function == "log":
-        add_text("log10(")
+
+        add_text(
+            "log10("
+        )
+
 
     elif function == "log2":
-        add_text("log2(")
+
+        add_text(
+            "log2("
+        )
+
 
     elif function in [
+
         "sin",
         "cos",
         "tan",
@@ -512,55 +930,91 @@ def add_function(function):
         "sinh",
         "cosh",
         "tanh"
+
     ]:
-        add_text(f"{function}(")
+
+        add_text(
+            f"{function}("
+        )
+
 
     elif function == "abs":
-        add_text("Abs(")
+
+        add_text(
+            "Abs("
+        )
+
 
     elif function == "square":
+
         if st.session_state.expression:
+
             st.session_state.expression += "^2"
 
+
     elif function == "cube":
+
         if st.session_state.expression:
+
             st.session_state.expression += "^3"
+
 
     elif function == "reciprocal":
 
         if st.session_state.expression:
+
             st.session_state.expression = (
                 f"1/({st.session_state.expression})"
             )
 
+
     elif function == "cuberoot":
-        add_text("real_root(")
+
+        add_text(
+            "real_root("
+        )
+
 
     elif function == "floor":
-        add_text("floor(")
+
+        add_text(
+            "floor("
+        )
+
 
     elif function == "ceil":
-        add_text("ceiling(")
+
+        add_text(
+            "ceiling("
+        )
+
 
     elif function == "factorial":
 
         if st.session_state.expression:
+
             st.session_state.expression += "!"
 
+
     elif function == "exp":
-        add_text("E")
+
+        add_text(
+            "E"
+        )
+
 
     st.session_state.error = ""
 
 
 # ============================================================
-# HEADER
+# START CALCULATOR CONTAINER
 # ============================================================
 
 st.markdown(
     "<div class='calculator'>",
     unsafe_allow_html=True
 )
+
 
 # ============================================================
 # DISPLAY
@@ -571,7 +1025,12 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-top_col1, top_col2 = st.columns([1, 5])
+
+top_col1, top_col2 = st.columns(
+    [1, 5],
+    gap="small"
+)
+
 
 with top_col1:
 
@@ -579,20 +1038,30 @@ with top_col1:
         "↶",
         key="history_toggle"
     ):
+
         st.session_state.show_history = (
             not st.session_state.show_history
         )
+
+        st.rerun()
+
 
 with top_col2:
 
     st.markdown(
         f"""
-        <div style="text-align:right;color:#777;font-size:13px;">
+        <div style="
+            text-align:right;
+            color:#777;
+            font-size:12px;
+            padding-top:4px;
+        ">
             {st.session_state.angle_mode}
         </div>
         """,
         unsafe_allow_html=True
     )
+
 
 st.markdown(
     f"""
@@ -606,6 +1075,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
 st.markdown(
     "</div>",
@@ -635,6 +1105,7 @@ if st.session_state.show_history:
 
                 st.rerun()
 
+
             for index, item in enumerate(
                 st.session_state.history
             ):
@@ -643,6 +1114,7 @@ if st.session_state.show_history:
                     f"**{item['expression']}** = "
                     f"**{item['result']}**"
                 )
+
 
                 if st.button(
                     "Use",
@@ -659,22 +1131,35 @@ if st.session_state.show_history:
 
                     st.rerun()
 
+
         else:
 
-            st.info("No calculations yet.")
-
-
+            st.info(
+                "No calculations yet."
+            )
 
 
 # ============================================================
 # DEG / RAD + MEMORY
 # ============================================================
 
-mode_col, inv_col, mc_col, mr_col, mp_col, mm_col = st.columns(6)
+st.markdown(
+    '<div class="mode-row">',
+    unsafe_allow_html=True
+)
 
-# ------------------------------------------------------------
+
+mode_col, inv_col, mc_col, mr_col, mp_col, mm_col = (
+    st.columns(
+        6,
+        gap="small"
+    )
+)
+
+
+# ============================================================
 # DEG / RAD
-# ------------------------------------------------------------
+# ============================================================
 
 with mode_col:
 
@@ -683,21 +1168,36 @@ with mode_col:
         key="angle_mode_button"
     ):
 
-        if st.session_state.angle_mode == "DEG":
-            st.session_state.angle_mode = "RAD"
+        if (
+            st.session_state.angle_mode
+            == "DEG"
+        ):
+
+            st.session_state.angle_mode = (
+                "RAD"
+            )
+
         else:
-            st.session_state.angle_mode = "DEG"
+
+            st.session_state.angle_mode = (
+                "DEG"
+            )
 
         st.rerun()
 
 
-# ------------------------------------------------------------
+# ============================================================
 # INV
-# ------------------------------------------------------------
+# ============================================================
 
 with inv_col:
 
-    inv_label = "INV" if not st.session_state.inverse else "INV ✓"
+    inv_label = (
+        "INV"
+        if not st.session_state.inverse
+        else "INV ✓"
+    )
+
 
     if st.button(
         inv_label,
@@ -711,9 +1211,9 @@ with inv_col:
         st.rerun()
 
 
-# ------------------------------------------------------------
-# MEMORY CLEAR
-# ------------------------------------------------------------
+# ============================================================
+# MC
+# ============================================================
 
 with mc_col:
 
@@ -725,9 +1225,9 @@ with mc_col:
         st.session_state.memory = 0
 
 
-# ------------------------------------------------------------
-# MEMORY RECALL
-# ------------------------------------------------------------
+# ============================================================
+# MR
+# ============================================================
 
 with mr_col:
 
@@ -736,14 +1236,18 @@ with mr_col:
         key="memory_recall_button"
     ):
 
-        add_text(str(st.session_state.memory))
+        add_text(
+            str(
+                st.session_state.memory
+            )
+        )
 
         st.rerun()
 
 
-# ------------------------------------------------------------
-# MEMORY ADD
-# ------------------------------------------------------------
+# ============================================================
+# M+
+# ============================================================
 
 with mp_col:
 
@@ -758,16 +1262,18 @@ with mp_col:
                 st.session_state.expression
             )
 
-            st.session_state.memory += float(value)
+            st.session_state.memory += (
+                float(value)
+            )
 
         except Exception:
 
             pass
 
 
-# ------------------------------------------------------------
-# MEMORY SUBTRACT
-# ------------------------------------------------------------
+# ============================================================
+# M-
+# ============================================================
 
 with mm_col:
 
@@ -782,11 +1288,19 @@ with mm_col:
                 st.session_state.expression
             )
 
-            st.session_state.memory -= float(value)
+            st.session_state.memory -= (
+                float(value)
+            )
 
         except Exception:
 
             pass
+
+
+st.markdown(
+    "</div>",
+    unsafe_allow_html=True
+)
 
 
 # ============================================================
@@ -795,7 +1309,10 @@ with mm_col:
 
 buttons = [
 
-    # Row 1
+    # --------------------------------------------------------
+    # ROW 1
+    # --------------------------------------------------------
+
     [
         ("x!", "factorial"),
         ("(", "("),
@@ -806,7 +1323,10 @@ buttons = [
         ("÷", "÷"),
     ],
 
-    # Row 2
+    # --------------------------------------------------------
+    # ROW 2
+    # --------------------------------------------------------
+
     [
         ("sin", "sin"),
         ("ln", "ln"),
@@ -817,7 +1337,10 @@ buttons = [
         ("√", "sqrt"),
     ],
 
-    # Row 3
+    # --------------------------------------------------------
+    # ROW 3
+    # --------------------------------------------------------
+
     [
         ("cos", "cos"),
         ("log", "log"),
@@ -828,7 +1351,10 @@ buttons = [
         ("π", "π"),
     ],
 
-    # Row 4
+    # --------------------------------------------------------
+    # ROW 4
+    # --------------------------------------------------------
+
     [
         ("tan", "tan"),
         ("e", "e"),
@@ -839,7 +1365,10 @@ buttons = [
         ("Ans", "Ans"),
     ],
 
-    # Row 5
+    # --------------------------------------------------------
+    # ROW 5
+    # --------------------------------------------------------
+
     [
         ("EXP", "exp"),
         ("xʸ", "^"),
@@ -851,8 +1380,9 @@ buttons = [
     ],
 ]
 
+
 # ============================================================
-# RESPONSIVE CALCULATOR GRID
+# CALCULATOR GRID
 # ============================================================
 
 st.markdown(
@@ -860,18 +1390,22 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+
 for row_index, row in enumerate(buttons):
 
-    # Keep exactly 7 calculator keys in every row
     columns = st.columns(
         7,
-        gap="small",
-        wrap=False
+        gap="small"
     )
+
 
     for col_index, (label, action) in enumerate(row):
 
         with columns[col_index]:
+
+            # ------------------------------------------------
+            # AC
+            # ------------------------------------------------
 
             if action == "AC":
 
@@ -879,8 +1413,15 @@ for row_index, row in enumerate(buttons):
                     label,
                     key=f"button_{row_index}_{col_index}"
                 ):
+
                     clear_all()
+
                     st.rerun()
+
+
+            # ------------------------------------------------
+            # DELETE
+            # ------------------------------------------------
 
             elif action == "DEL":
 
@@ -888,8 +1429,15 @@ for row_index, row in enumerate(buttons):
                     label,
                     key=f"button_{row_index}_{col_index}"
                 ):
+
                     delete_last()
+
                     st.rerun()
+
+
+            # ------------------------------------------------
+            # EQUALS
+            # ------------------------------------------------
 
             elif action == "=":
 
@@ -897,8 +1445,15 @@ for row_index, row in enumerate(buttons):
                     label,
                     key=f"button_{row_index}_{col_index}"
                 ):
+
                     calculate()
+
                     st.rerun()
+
+
+            # ------------------------------------------------
+            # ANSWER
+            # ------------------------------------------------
 
             elif action == "Ans":
 
@@ -906,10 +1461,20 @@ for row_index, row in enumerate(buttons):
                     label,
                     key=f"button_{row_index}_{col_index}"
                 ):
-                    add_text("Ans")
+
+                    add_text(
+                        "Ans"
+                    )
+
                     st.rerun()
 
+
+            # ------------------------------------------------
+            # SCIENTIFIC FUNCTIONS
+            # ------------------------------------------------
+
             elif action in [
+
                 "sin",
                 "cos",
                 "tan",
@@ -918,6 +1483,7 @@ for row_index, row in enumerate(buttons):
                 "log",
                 "factorial",
                 "exp"
+
             ]:
 
                 if st.button(
@@ -925,8 +1491,16 @@ for row_index, row in enumerate(buttons):
                     key=f"button_{row_index}_{col_index}"
                 ):
 
-                    add_function(action)
+                    add_function(
+                        action
+                    )
+
                     st.rerun()
+
+
+            # ------------------------------------------------
+            # NORMAL BUTTONS
+            # ------------------------------------------------
 
             else:
 
@@ -935,50 +1509,88 @@ for row_index, row in enumerate(buttons):
                     key=f"button_{row_index}_{col_index}"
                 ):
 
-                    add_text(action)
+                    add_text(
+                        action
+                    )
+
                     st.rerun()
-            st.markdown(
-    '</div>',
+
+
+st.markdown(
+    "</div>",
     unsafe_allow_html=True
 )
+
 
 # ============================================================
 # MORE SCIENTIFIC FUNCTIONS
 # ============================================================
 
-st.markdown("---")
+st.markdown(
+    "<hr>",
+    unsafe_allow_html=True
+)
 
-with st.expander("⚙️ More Scientific Functions"):
+
+with st.expander(
+    "⚙️ More Scientific Functions"
+):
 
     more_buttons = [
+
         ("asin", "asin"),
+
         ("acos", "acos"),
+
         ("atan", "atan"),
+
         ("sinh", "sinh"),
+
         ("cosh", "cosh"),
+
         ("tanh", "tanh"),
+
         ("log₂", "log2"),
+
         ("1/x", "reciprocal"),
+
         ("x²", "square"),
+
         ("x³", "cube"),
+
         ("∛x", "cuberoot"),
+
         ("|x|", "abs"),
+
         ("floor", "floor"),
+
         ("ceil", "ceil"),
     ]
 
-    more_columns = st.columns(4)
 
-    for index, (label, action) in enumerate(more_buttons):
+    more_columns = st.columns(
+        4,
+        gap="small"
+    )
 
-        with more_columns[index % 4]:
+
+    for index, (label, action) in enumerate(
+        more_buttons
+    ):
+
+        with more_columns[
+            index % 4
+        ]:
 
             if st.button(
                 label,
                 key=f"more_{index}"
             ):
 
-                add_function(action)
+                add_function(
+                    action
+                )
+
                 st.rerun()
 
 
@@ -986,16 +1598,28 @@ with st.expander("⚙️ More Scientific Functions"):
 # KEYBOARD INFORMATION
 # ============================================================
 
-st.markdown("---")
-
-st.caption(
-    "⌨️ Keyboard: numbers, +, -, *, /, parentheses, "
-    "Enter = calculate, Backspace = delete, Esc = clear"
+st.markdown(
+    "<hr>",
+    unsafe_allow_html=True
 )
 
+
 st.caption(
-    "🧮 Scientific Calculator • Python + Streamlit + SymPy"
+    "⌨️ Keyboard: numbers, +, -, *, /, "
+    "parentheses, Enter = calculate, "
+    "Backspace = delete, Esc = clear"
 )
+
+
+st.caption(
+    "🧮 Scientific Calculator • "
+    "Python + Streamlit + SymPy"
+)
+
+
+# ============================================================
+# CLOSE CALCULATOR
+# ============================================================
 
 st.markdown(
     "</div>",
