@@ -79,15 +79,71 @@ header {
     color: #4b5563;
 }
 
-/* Streamlit buttons */
+/* Streamlit calculator buttons */
 .stButton > button {
     width: 100%;
+    min-width: 42px;
     height: 48px;
+    padding: 0;
     border-radius: 25px;
     border: none;
     font-size: 15px;
     background-color: #f1f3f4;
     color: #111827;
+    white-space: nowrap;
+}
+
+.stButton {
+    width: 100%;
+}
+
+/* Calculator grid */
+.calculator-grid {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Keep calculator columns together */
+.calculator-grid [data-testid="column"] {
+    min-width: 42px !important;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+
+    .calculator {
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+    }
+
+    .display-box {
+        border-radius: 18px;
+        padding: 8px 12px;
+    }
+
+    .display-result {
+        font-size: 30px;
+    }
+
+    .display-expression {
+        font-size: 17px;
+    }
+
+    .stButton > button {
+        min-width: 40px;
+        height: 44px;
+        font-size: 13px;
+    }
+
+    .calculator-grid {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .calculator-grid [data-testid="column"] {
+        min-width: 0 !important;
+    }
 }
 
 .stButton > button:hover {
@@ -795,10 +851,23 @@ buttons = [
     ],
 ]
 
+# ============================================================
+# RESPONSIVE CALCULATOR GRID
+# ============================================================
+
+st.markdown(
+    '<div class="calculator-grid">',
+    unsafe_allow_html=True
+)
 
 for row_index, row in enumerate(buttons):
 
-    columns = st.columns(7)
+    # Keep exactly 7 calculator keys in every row
+    columns = st.columns(
+        7,
+        gap="small",
+        wrap=False
+    )
 
     for col_index, (label, action) in enumerate(row):
 
@@ -868,7 +937,10 @@ for row_index, row in enumerate(buttons):
 
                     add_text(action)
                     st.rerun()
-
+            st.markdown(
+    '</div>',
+    unsafe_allow_html=True
+)
 
 # ============================================================
 # MORE SCIENTIFIC FUNCTIONS
