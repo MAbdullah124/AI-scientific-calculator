@@ -24,6 +24,10 @@ st.set_page_config(
 st.markdown("""
 <style>
 
+/* ============================================================
+   HIDE DEFAULT STREAMLIT UI
+   ============================================================ */
+
 #MainMenu {
     visibility: hidden;
 }
@@ -37,77 +41,156 @@ footer {
 }
 
 
-/* Main page */
-
-.block-container {
-    max-width: 760px !important;
-    padding-top: 8px !important;
-    padding-bottom: 15px !important;
-    padding-left: 5px !important;
-    padding-right: 5px !important;
-
-    overflow-x: hidden !important;
-}
-
-
-/* Prevent horizontal scrolling */
+/* ============================================================
+   PAGE
+   ============================================================ */
 
 html,
 body,
-.stApp,
-[data-testid="stAppViewContainer"],
-[data-testid="stMain"] {
+.stApp {
+    overflow-x: hidden !important;
+}
+
+.block-container {
+    max-width: 760px !important;
+
+    padding-top: 8px !important;
+    padding-bottom: 20px !important;
+
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+
     overflow-x: hidden !important;
 }
 
 
-/* Streamlit columns */
+/* ============================================================
+   VERY IMPORTANT:
+   KEEP EACH st.columns() ROW HORIZONTAL
+   ============================================================ */
 
-[data-testid="column"] {
-    padding-left: 2px !important;
-    padding-right: 2px !important;
-    min-width: 0 !important;
+/*
+   Streamlit normally stacks columns on small/mobile screens.
+
+   We prevent that here.
+
+   IMPORTANT:
+   This applies to EACH individual HorizontalBlock.
+   Therefore:
+
+       st.columns(7)
+       st.columns(7)
+       st.columns(7)
+
+   remain THREE separate rows of 7 buttons.
+
+   They do NOT become one giant row.
+*/
+
+[data-testid="stHorizontalBlock"] {
+    display: flex !important;
+
+    flex-direction: row !important;
+
+    flex-wrap: nowrap !important;
+
+    width: 100% !important;
+
+    align-items: stretch !important;
+
+    gap: 4px !important;
+
+    margin-bottom: 4px !important;
+
+    overflow: visible !important;
 }
 
 
-/* Buttons */
+/* ============================================================
+   COLUMNS
+   ============================================================ */
 
-.stButton {
-    width: 100% !important;
-    padding: 0 !important;
+[data-testid="stHorizontalBlock"] > [data-testid="column"] {
+
+    flex: 1 1 0% !important;
+
+    width: 0 !important;
+
+    min-width: 0 !important;
+
+    max-width: none !important;
+
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+
     margin: 0 !important;
 }
 
-.stButton > button {
-    width: 100% !important;
-    min-width: 0 !important;
 
-    height: 43px !important;
-    min-height: 43px !important;
+/* ============================================================
+   BUTTON CONTAINER
+   ============================================================ */
+
+.stButton {
+    width: 100% !important;
 
     padding: 0 !important;
+
+    margin: 0 !important;
+}
+
+
+/* ============================================================
+   BUTTON
+   ============================================================ */
+
+.stButton > button {
+
+    width: 100% !important;
+
+    min-width: 0 !important;
+    max-width: 100% !important;
+
+    height: 42px !important;
+
+    min-height: 42px !important;
+
+    padding: 0 !important;
+
     margin: 0 !important;
 
     border-radius: 21px !important;
 
     font-size: 12px !important;
+
     font-weight: 500 !important;
 
     white-space: nowrap !important;
+
     overflow: hidden !important;
+
     text-overflow: ellipsis !important;
 
     box-sizing: border-box !important;
 }
 
 
-/* Display */
+/* ============================================================
+   DISPLAY
+   ============================================================ */
 
 .display-box {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
     border: 1px solid #d1d5db;
+
     border-radius: 15px;
 
     padding: 7px 10px;
+
     margin-bottom: 6px;
 
     background: white;
@@ -116,95 +199,163 @@ body,
 }
 
 .display-expression {
+
+    width: 100%;
+
     text-align: right;
 
     font-size: 15px;
+
     line-height: 23px;
+
     height: 23px;
 
     color: #6b7280;
 
     white-space: nowrap;
+
     overflow: hidden;
+
     text-overflow: ellipsis;
 }
 
 .display-result {
+
+    width: 100%;
+
     text-align: right;
 
     font-size: 29px;
+
     line-height: 38px;
+
     height: 38px;
 
     color: #111827;
 
     white-space: nowrap;
+
     overflow: hidden;
+
     text-overflow: ellipsis;
 }
 
 
-/* Small gap between every native Streamlit row */
-
-div[data-testid="stHorizontalBlock"] {
-    margin-bottom: 4px !important;
-}
-
-
-/* Mobile */
+/* ============================================================
+   MOBILE
+   ============================================================ */
 
 @media (max-width: 640px) {
 
     .block-container {
+
         padding-left: 2px !important;
+
         padding-right: 2px !important;
     }
 
-    [data-testid="column"] {
-        padding-left: 1px !important;
-        padding-right: 1px !important;
+
+    /*
+       KEEP 7 COLUMNS ON PHONE
+    */
+
+    [data-testid="stHorizontalBlock"] {
+
+        display: flex !important;
+
+        flex-direction: row !important;
+
+        flex-wrap: nowrap !important;
+
+        gap: 3px !important;
+
+        width: 100% !important;
     }
+
+
+    [data-testid="stHorizontalBlock"] > [data-testid="column"] {
+
+        flex: 1 1 0% !important;
+
+        width: 0 !important;
+
+        min-width: 0 !important;
+
+        padding-left: 0 !important;
+
+        padding-right: 0 !important;
+    }
+
+
+    /* Smaller buttons */
 
     .stButton > button {
-        height: 37px !important;
-        min-height: 37px !important;
 
-        border-radius: 19px !important;
+        height: 36px !important;
 
-        font-size: 10px !important;
-    }
+        min-height: 36px !important;
 
-    .display-box {
-        padding: 5px 8px;
-        margin-bottom: 5px;
-    }
+        padding: 0 !important;
 
-    .display-expression {
-        font-size: 13px;
-        line-height: 20px;
-        height: 20px;
-    }
-
-    .display-result {
-        font-size: 25px;
-        line-height: 34px;
-        height: 34px;
-    }
-}
-
-
-/* Very small phones */
-
-@media (max-width: 380px) {
-
-    .stButton > button {
-        height: 34px !important;
-        min-height: 34px !important;
+        border-radius: 18px !important;
 
         font-size: 9px !important;
     }
 
+
+    /* Display */
+
+    .display-box {
+
+        padding: 5px 8px;
+
+        margin-bottom: 5px;
+    }
+
+    .display-expression {
+
+        font-size: 13px;
+
+        height: 20px;
+
+        line-height: 20px;
+    }
+
     .display-result {
+
+        font-size: 25px;
+
+        height: 34px;
+
+        line-height: 34px;
+    }
+}
+
+
+/* ============================================================
+   VERY SMALL PHONE
+   ============================================================ */
+
+@media (max-width: 380px) {
+
+    [data-testid="stHorizontalBlock"] {
+
+        gap: 2px !important;
+    }
+
+    .stButton > button {
+
+        height: 33px !important;
+
+        min-height: 33px !important;
+
+        border-radius: 17px !important;
+
+        font-size: 8px !important;
+    }
+
+    .display-result {
+
         font-size: 23px;
     }
 }
