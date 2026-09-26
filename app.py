@@ -1,7 +1,5 @@
 import streamlit as st
-import sympy as sp
-import math
-import re
+import streamlit.components.v1 as components
 
 
 # ============================================================
@@ -16,162 +14,63 @@ st.set_page_config(
 
 
 # ============================================================
-# CSS
-# IMPORTANT:
-# NO GRID/FLEX LAYOUT CHANGES
+# CALCULATOR
 # ============================================================
 
-st.markdown("""
+calculator_html = r"""
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
 <style>
-
-/* ============================================================
-   HIDE DEFAULT STREAMLIT UI
-   ============================================================ */
-
-#MainMenu {
-    visibility: hidden;
-}
-
-header {
-    visibility: hidden;
-}
-
-footer {
-    visibility: hidden;
-}
-
 
 /* ============================================================
    PAGE
    ============================================================ */
 
+* {
+    box-sizing: border-box;
+}
+
 html,
-body,
-.stApp {
-    overflow-x: hidden !important;
-}
+body {
 
-.block-container {
-    max-width: 760px !important;
+    margin: 0;
+    padding: 0;
 
-    padding-top: 8px !important;
-    padding-bottom: 20px !important;
+    width: 100%;
 
-    padding-left: 4px !important;
-    padding-right: 4px !important;
+    overflow-x: hidden;
 
-    overflow-x: hidden !important;
-}
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
-
-/* ============================================================
-   VERY IMPORTANT:
-   KEEP EACH st.columns() ROW HORIZONTAL
-   ============================================================ */
-
-/*
-   Streamlit normally stacks columns on small/mobile screens.
-
-   We prevent that here.
-
-   IMPORTANT:
-   This applies to EACH individual HorizontalBlock.
-   Therefore:
-
-       st.columns(7)
-       st.columns(7)
-       st.columns(7)
-
-   remain THREE separate rows of 7 buttons.
-
-   They do NOT become one giant row.
-*/
-
-[data-testid="stHorizontalBlock"] {
-    display: flex !important;
-
-    flex-direction: row !important;
-
-    flex-wrap: nowrap !important;
-
-    width: 100% !important;
-
-    align-items: stretch !important;
-
-    gap: 4px !important;
-
-    margin-bottom: 4px !important;
-
-    overflow: visible !important;
+    background: white;
 }
 
 
 /* ============================================================
-   COLUMNS
+   CALCULATOR
    ============================================================ */
 
-[data-testid="stHorizontalBlock"] > [data-testid="column"] {
+.calculator {
 
-    flex: 1 1 0% !important;
+    width: 100%;
 
-    width: 0 !important;
+    max-width: 760px;
 
-    min-width: 0 !important;
+    margin: 0 auto;
 
-    max-width: none !important;
+    padding: 6px;
 
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-
-    margin: 0 !important;
-}
-
-
-/* ============================================================
-   BUTTON CONTAINER
-   ============================================================ */
-
-.stButton {
-    width: 100% !important;
-
-    padding: 0 !important;
-
-    margin: 0 !important;
-}
-
-
-/* ============================================================
-   BUTTON
-   ============================================================ */
-
-.stButton > button {
-
-    width: 100% !important;
-
-    min-width: 0 !important;
-    max-width: 100% !important;
-
-    height: 42px !important;
-
-    min-height: 42px !important;
-
-    padding: 0 !important;
-
-    margin: 0 !important;
-
-    border-radius: 21px !important;
-
-    font-size: 12px !important;
-
-    font-weight: 500 !important;
-
-    white-space: nowrap !important;
-
-    overflow: hidden !important;
-
-    text-overflow: ellipsis !important;
-
-    box-sizing: border-box !important;
+    overflow: hidden;
 }
 
 
@@ -179,38 +78,37 @@ body,
    DISPLAY
    ============================================================ */
 
-.display-box {
+.display {
 
     width: 100%;
 
-    box-sizing: border-box;
-
     border: 1px solid #d1d5db;
 
-    border-radius: 15px;
+    border-radius: 16px;
 
-    padding: 7px 10px;
+    padding: 8px 12px;
 
-    margin-bottom: 6px;
+    margin-bottom: 7px;
 
     background: white;
 
     overflow: hidden;
 }
 
-.display-expression {
+
+.expression {
 
     width: 100%;
 
+    height: 24px;
+
+    line-height: 24px;
+
     text-align: right;
 
-    font-size: 15px;
-
-    line-height: 23px;
-
-    height: 23px;
-
     color: #6b7280;
+
+    font-size: 15px;
 
     white-space: nowrap;
 
@@ -219,25 +117,228 @@ body,
     text-overflow: ellipsis;
 }
 
-.display-result {
+
+.result {
 
     width: 100%;
 
+    height: 40px;
+
+    line-height: 40px;
+
     text-align: right;
 
-    font-size: 29px;
-
-    line-height: 38px;
-
-    height: 38px;
-
     color: #111827;
+
+    font-size: 30px;
+
+    font-weight: 500;
 
     white-space: nowrap;
 
     overflow: hidden;
 
     text-overflow: ellipsis;
+}
+
+
+/* ============================================================
+   MODE / MEMORY ROW
+   6 COLUMNS
+   ============================================================ */
+
+.mode-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(6, minmax(0, 1fr));
+
+    gap: 4px;
+
+    width: 100%;
+
+    margin-bottom: 5px;
+}
+
+
+/* ============================================================
+   MAIN KEYPAD
+   7 COLUMNS
+   ============================================================ */
+
+.keypad {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    gap: 4px;
+
+    width: 100%;
+}
+
+
+/* ============================================================
+   BUTTON
+   ============================================================ */
+
+button {
+
+    width: 100%;
+
+    min-width: 0;
+
+    height: 43px;
+
+    border: none;
+
+    border-radius: 22px;
+
+    background: #f1f3f4;
+
+    color: #111827;
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+    padding: 0;
+
+    margin: 0;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    -webkit-tap-highlight-color:
+        transparent;
+}
+
+
+button:hover {
+
+    background: #e5e7eb;
+}
+
+
+button:active {
+
+    transform: scale(0.96);
+
+    background: #dfe3e7;
+}
+
+
+/* ============================================================
+   MODE BUTTONS
+   ============================================================ */
+
+.mode-grid button {
+
+    height: 36px;
+
+    border-radius: 18px;
+
+    font-size: 10px;
+}
+
+
+/* ============================================================
+   MORE FUNCTIONS
+   ============================================================ */
+
+.more-title {
+
+    margin-top: 8px;
+
+    margin-bottom: 5px;
+
+    font-size: 12px;
+
+    color: #4b5563;
+
+    text-align: center;
+}
+
+
+.more-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 4px;
+
+    width: 100%;
+}
+
+
+.more-grid button {
+
+    height: 36px;
+
+    border-radius: 18px;
+
+    font-size: 10px;
+}
+
+
+/* ============================================================
+   HISTORY
+   ============================================================ */
+
+.history-title {
+
+    margin-top: 8px;
+
+    padding-top: 7px;
+
+    border-top: 1px solid #e5e7eb;
+
+    font-size: 12px;
+
+    color: #4b5563;
+
+    text-align: center;
+
+    cursor: pointer;
+}
+
+
+.history {
+
+    display: none;
+
+    margin-top: 5px;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+
+    padding: 7px;
+
+    max-height: 150px;
+
+    overflow-y: auto;
+
+    font-size: 11px;
+
+    color: #374151;
+}
+
+
+.history-item {
+
+    padding: 5px 2px;
+
+    border-bottom: 1px solid #f0f0f0;
 }
 
 
@@ -247,88 +348,109 @@ body,
 
 @media (max-width: 640px) {
 
-    .block-container {
+    .calculator {
 
-        padding-left: 2px !important;
+        width: 100%;
 
-        padding-right: 2px !important;
+        padding: 3px;
     }
 
 
-    /*
-       KEEP 7 COLUMNS ON PHONE
-    */
+    .display {
 
-    [data-testid="stHorizontalBlock"] {
-
-        display: flex !important;
-
-        flex-direction: row !important;
-
-        flex-wrap: nowrap !important;
-
-        gap: 3px !important;
-
-        width: 100% !important;
-    }
-
-
-    [data-testid="stHorizontalBlock"] > [data-testid="column"] {
-
-        flex: 1 1 0% !important;
-
-        width: 0 !important;
-
-        min-width: 0 !important;
-
-        padding-left: 0 !important;
-
-        padding-right: 0 !important;
-    }
-
-
-    /* Smaller buttons */
-
-    .stButton > button {
-
-        height: 36px !important;
-
-        min-height: 36px !important;
-
-        padding: 0 !important;
-
-        border-radius: 18px !important;
-
-        font-size: 9px !important;
-    }
-
-
-    /* Display */
-
-    .display-box {
+        border-radius: 13px;
 
         padding: 5px 8px;
 
         margin-bottom: 5px;
     }
 
-    .display-expression {
 
-        font-size: 13px;
+    .expression {
 
         height: 20px;
 
         line-height: 20px;
+
+        font-size: 12px;
     }
 
-    .display-result {
 
-        font-size: 25px;
+    .result {
 
         height: 34px;
 
         line-height: 34px;
+
+        font-size: 25px;
     }
+
+
+    /*
+       IMPORTANT:
+       These are CSS GRID layouts.
+
+       They NEVER stack into one column.
+    */
+
+    .mode-grid {
+
+        grid-template-columns:
+            repeat(6, minmax(0, 1fr));
+
+        gap: 3px;
+
+        margin-bottom: 4px;
+    }
+
+
+    .keypad {
+
+        grid-template-columns:
+            repeat(7, minmax(0, 1fr));
+
+        gap: 3px;
+    }
+
+
+    .mode-grid button {
+
+        height: 32px;
+
+        border-radius: 16px;
+
+        font-size: 8px;
+    }
+
+
+    .keypad button {
+
+        height: 36px;
+
+        border-radius: 18px;
+
+        font-size: 9px;
+    }
+
+
+    .more-grid {
+
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+
+        gap: 3px;
+    }
+
+
+    .more-grid button {
+
+        height: 32px;
+
+        border-radius: 16px;
+
+        font-size: 9px;
+    }
+
 }
 
 
@@ -338,848 +460,1437 @@ body,
 
 @media (max-width: 380px) {
 
-    [data-testid="stHorizontalBlock"] {
+    .calculator {
 
-        gap: 2px !important;
+        padding: 2px;
     }
 
-    .stButton > button {
 
-        height: 33px !important;
+    .mode-grid {
 
-        min-height: 33px !important;
-
-        border-radius: 17px !important;
-
-        font-size: 8px !important;
+        gap: 2px;
     }
 
-    .display-result {
 
-        font-size: 23px;
+    .keypad {
+
+        gap: 2px;
     }
+
+
+    .mode-grid button {
+
+        height: 29px;
+
+        font-size: 7px;
+    }
+
+
+    .keypad button {
+
+        height: 33px;
+
+        font-size: 8px;
+    }
+
+
+    .more-grid {
+
+        gap: 2px;
+    }
+
+
+    .more-grid button {
+
+        height: 29px;
+
+        font-size: 8px;
+    }
+
 }
 
 </style>
-""", unsafe_allow_html=True)
+
+</head>
 
 
-# ============================================================
-# SESSION STATE
-# ============================================================
+<body>
 
-defaults = {
-    "expression": "",
-    "result": "0",
-    "angle_mode": "DEG",
-    "inverse": False,
-    "memory": 0,
-    "ans": 0,
-    "history": [],
-    "show_history": False,
-    "error": ""
+
+<div class="calculator">
+
+
+    <!-- =====================================================
+         DISPLAY
+         ===================================================== -->
+
+    <div class="display">
+
+        <div
+            class="expression"
+            id="expression">
+        </div>
+
+        <div
+            class="result"
+            id="result">
+            0
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DEG / INV / MEMORY
+         EXACTLY 6 COLUMNS
+         ===================================================== -->
+
+    <div class="mode-grid">
+
+        <button onclick="toggleAngle()"
+                id="angleButton">
+            DEG
+        </button>
+
+        <button onclick="toggleInverse()"
+                id="inverseButton">
+            INV
+        </button>
+
+        <button onclick="memoryClear()">
+            MC
+        </button>
+
+        <button onclick="memoryRecall()">
+            MR
+        </button>
+
+        <button onclick="memoryAdd()">
+            M+
+        </button>
+
+        <button onclick="memorySubtract()">
+            M-
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN KEYPAD
+         EXACTLY 7 COLUMNS
+         ===================================================== -->
+
+    <div class="keypad">
+
+
+        <!-- ROW 1 -->
+
+        <button onclick="factorial()">
+            x!
+        </button>
+
+        <button onclick="add('(')">
+            (
+        </button>
+
+        <button onclick="add(')')">
+            )
+        </button>
+
+        <button onclick="add('%')">
+            %
+        </button>
+
+        <button onclick="clearAll()">
+            AC
+        </button>
+
+        <button onclick="backspace()">
+            ⌫
+        </button>
+
+        <button onclick="add('/')">
+            ÷
+        </button>
+
+
+        <!-- ROW 2 -->
+
+        <button onclick="scientific('sin')">
+            sin
+        </button>
+
+        <button onclick="scientific('ln')">
+            ln
+        </button>
+
+        <button onclick="add('7')">
+            7
+        </button>
+
+        <button onclick="add('8')">
+            8
+        </button>
+
+        <button onclick="add('9')">
+            9
+        </button>
+
+        <button onclick="add('*')">
+            ×
+        </button>
+
+        <button onclick="scientific('sqrt')">
+            √
+        </button>
+
+
+        <!-- ROW 3 -->
+
+        <button onclick="scientific('cos')">
+            cos
+        </button>
+
+        <button onclick="scientific('log')">
+            log
+        </button>
+
+        <button onclick="add('4')">
+            4
+        </button>
+
+        <button onclick="add('5')">
+            5
+        </button>
+
+        <button onclick="add('6')">
+            6
+        </button>
+
+        <button onclick="add('-')">
+            −
+        </button>
+
+        <button onclick="add('pi')">
+            π
+        </button>
+
+
+        <!-- ROW 4 -->
+
+        <button onclick="scientific('tan')">
+            tan
+        </button>
+
+        <button onclick="add('e')">
+            e
+        </button>
+
+        <button onclick="add('1')">
+            1
+        </button>
+
+        <button onclick="add('2')">
+            2
+        </button>
+
+        <button onclick="add('3')">
+            3
+        </button>
+
+        <button onclick="add('+')">
+            +
+        </button>
+
+        <button onclick="add('Ans')">
+            Ans
+        </button>
+
+
+        <!-- ROW 5 -->
+
+        <button onclick="add('E')">
+            EXP
+        </button>
+
+        <button onclick="add('^')">
+            xʸ
+        </button>
+
+        <button onclick="add('0')">
+            0
+        </button>
+
+        <button onclick="add('.')">
+            .
+        </button>
+
+        <button onclick="calculate()">
+            =
+        </button>
+
+        <button onclick="add('(')">
+            (
+        </button>
+
+        <button onclick="add(')')">
+            )
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         MORE FUNCTIONS
+         ===================================================== -->
+
+    <div
+        class="more-title"
+        onclick="toggleMore()">
+
+        ⚙️ More Scientific Functions
+
+    </div>
+
+
+    <div
+        class="more-grid"
+        id="moreFunctions"
+        style="display:none;">
+
+
+        <button onclick="scientific('asin')">
+            asin
+        </button>
+
+        <button onclick="scientific('acos')">
+            acos
+        </button>
+
+        <button onclick="scientific('atan')">
+            atan
+        </button>
+
+        <button onclick="scientific('sinh')">
+            sinh
+        </button>
+
+
+        <button onclick="scientific('cosh')">
+            cosh
+        </button>
+
+        <button onclick="scientific('tanh')">
+            tanh
+        </button>
+
+        <button onclick="scientific('log2')">
+            log₂
+        </button>
+
+        <button onclick="scientific('reciprocal')">
+            1/x
+        </button>
+
+
+        <button onclick="scientific('square')">
+            x²
+        </button>
+
+        <button onclick="scientific('cube')">
+            x³
+        </button>
+
+        <button onclick="scientific('cuberoot')">
+            ∛x
+        </button>
+
+        <button onclick="scientific('abs')">
+            |x|
+        </button>
+
+
+        <button onclick="scientific('floor')">
+            floor
+        </button>
+
+        <button onclick="scientific('ceil')">
+            ceil
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         HISTORY
+         ===================================================== -->
+
+    <div
+        class="history-title"
+        onclick="toggleHistory()">
+
+        🕘 History
+
+    </div>
+
+
+    <div
+        class="history"
+        id="history">
+    </div>
+
+
+</div>
+
+
+<script>
+
+/* ============================================================
+   VARIABLES
+   ============================================================ */
+
+let expression = "";
+
+let answer = 0;
+
+let memory = 0;
+
+let angleMode = "DEG";
+
+let inverse = false;
+
+let history = [];
+
+
+/* ============================================================
+   DISPLAY
+   ============================================================ */
+
+function updateDisplay() {
+
+    document.getElementById(
+        "expression"
+    ).textContent = expression;
+
+    document.getElementById(
+        "result"
+    ).textContent = answer;
 }
 
-for key, value in defaults.items():
-    if key not in st.session_state:
-        st.session_state[key] = value
 
+/* ============================================================
+   ADD
+   ============================================================ */
 
-# ============================================================
-# FACTORIAL
-# ============================================================
+function add(value) {
 
-def factorial_value(value):
+    expression += value;
 
-    if value < 0:
-        raise ValueError("Invalid factorial")
+    updateDisplay();
+}
 
-    if not float(value).is_integer():
-        raise ValueError("Factorial requires a whole number")
 
-    if value > 170:
-        raise ValueError("Number is too large for factorial")
+/* ============================================================
+   CLEAR
+   ============================================================ */
 
-    return math.factorial(int(value))
+function clearAll() {
 
+    expression = "";
 
-# ============================================================
-# PREPARE EXPRESSION
-# ============================================================
+    answer = 0;
 
-def prepare_expression(expression):
+    updateDisplay();
+}
 
-    expr = expression
 
-    expr = expr.replace("×", "*")
-    expr = expr.replace("÷", "/")
-    expr = expr.replace("−", "-")
-    expr = expr.replace("^", "**")
+/* ============================================================
+   BACKSPACE
+   ============================================================ */
 
-    expr = expr.replace("π", "pi")
+function backspace() {
 
-    expr = re.sub(
-        r"\be\b",
-        "E",
-        expr
-    )
-
-    expr = re.sub(
-        r"\bAns\b",
-        f"({st.session_state.ans})",
-        expr
-    )
-
-    expr = re.sub(
-        r"(\d+(?:\.\d+)?)%",
-        r"(\1/100)",
-        expr
-    )
-
-    return expr
-
-
-# ============================================================
-# CALCULATE
-# ============================================================
-
-def calculate_expression(expression):
-
-    if not expression.strip():
-        return "0"
-
-    try:
-
-        expr = prepare_expression(expression)
-
-        # Factorial
-        factorial_pattern = r"(\d+(?:\.\d+)?)!"
-
-        def factorial_replace(match):
-
-            number = float(match.group(1))
-
-            return str(
-                factorial_value(number)
-            )
-
-        expr = re.sub(
-            factorial_pattern,
-            factorial_replace,
-            expr
-        )
-
-        # Allowed functions
-        allowed = {
-            "pi": sp.pi,
-            "E": sp.E,
-
-            "sqrt": sp.sqrt,
-
-            "sin": sp.sin,
-            "cos": sp.cos,
-            "tan": sp.tan,
-
-            "asin": sp.asin,
-            "acos": sp.acos,
-            "atan": sp.atan,
-
-            "sinh": sp.sinh,
-            "cosh": sp.cosh,
-            "tanh": sp.tanh,
-
-            "log": sp.log,
-            "log10": sp.log,
-
-            "log2": lambda x: sp.log(x, 2),
-
-            "Abs": sp.Abs,
-
-            "floor": sp.floor,
-            "ceiling": sp.ceiling,
-
-            "real_root": sp.real_root
-        }
-
-        # DEG mode
-        if st.session_state.angle_mode == "DEG":
-
-            allowed["sin"] = lambda x: sp.sin(
-                sp.pi * x / 180
-            )
-
-            allowed["cos"] = lambda x: sp.cos(
-                sp.pi * x / 180
-            )
-
-            allowed["tan"] = lambda x: sp.tan(
-                sp.pi * x / 180
-            )
-
-            allowed["asin"] = lambda x: (
-                sp.asin(x) * 180 / sp.pi
-            )
-
-            allowed["acos"] = lambda x: (
-                sp.acos(x) * 180 / sp.pi
-            )
-
-            allowed["atan"] = lambda x: (
-                sp.atan(x) * 180 / sp.pi
-            )
-
-        # Evaluate
-        result = sp.sympify(
-            expr,
-            locals=allowed
-        )
-
-        result = sp.N(result)
-
-        if result.has(
-            sp.zoo,
-            sp.oo,
-            -sp.oo,
-            sp.nan
-        ):
-            raise ValueError(
-                "Invalid mathematical result"
-            )
-
-        numeric_result = float(result)
-
-        if not math.isfinite(numeric_result):
-            raise ValueError(
-                "Invalid mathematical result"
-            )
-
-        if numeric_result.is_integer():
-            return str(int(numeric_result))
-
-        return f"{numeric_result:.12g}"
-
-    except ZeroDivisionError:
-
-        raise ValueError(
-            "Cannot divide by zero"
-        )
-
-    except ValueError as error:
-
-        raise error
-
-    except Exception:
-
-        raise ValueError(
-            "Invalid expression"
-        )
-
-
-# ============================================================
-# BASIC ACTIONS
-# ============================================================
-
-def add_text(text):
-
-    st.session_state.expression += text
-    st.session_state.error = ""
-
-
-def clear_all():
-
-    st.session_state.expression = ""
-    st.session_state.result = "0"
-    st.session_state.error = ""
-
-
-def delete_last():
-
-    st.session_state.expression = (
-        st.session_state.expression[:-1]
-    )
-
-    st.session_state.error = ""
-
-
-def calculate():
-
-    expression = st.session_state.expression
-
-    if not expression:
-        return
-
-    try:
-
-        result = calculate_expression(
-            expression
-        )
-
-        st.session_state.result = result
-
-        try:
-            st.session_state.ans = float(result)
-        except Exception:
-            st.session_state.ans = 0
-
-        st.session_state.history.insert(
+    expression =
+        expression.slice(
             0,
-            {
-                "expression": expression,
-                "result": result
+            -1
+        );
+
+    updateDisplay();
+}
+
+
+/* ============================================================
+   ANGLE MODE
+   ============================================================ */
+
+function toggleAngle() {
+
+    if (angleMode === "DEG") {
+
+        angleMode = "RAD";
+
+    } else {
+
+        angleMode = "DEG";
+    }
+
+
+    document.getElementById(
+        "angleButton"
+    ).textContent = angleMode;
+}
+
+
+/* ============================================================
+   INVERSE
+   ============================================================ */
+
+function toggleInverse() {
+
+    inverse = !inverse;
+
+
+    document.getElementById(
+        "inverseButton"
+    ).textContent =
+        inverse
+        ? "INV ✓"
+        : "INV";
+}
+
+
+/* ============================================================
+   FACTORIAL
+   ============================================================ */
+
+function factorial() {
+
+    expression += "!";
+
+    updateDisplay();
+}
+
+
+/* ============================================================
+   FACTORIAL CALCULATION
+   ============================================================ */
+
+function factorialValue(n) {
+
+    if (n < 0 ||
+        !Number.isInteger(n)) {
+
+        throw new Error(
+            "Factorial requires a whole number"
+        );
+    }
+
+
+    if (n > 170) {
+
+        throw new Error(
+            "Number too large"
+        );
+    }
+
+
+    let result = 1;
+
+
+    for (
+        let i = 2;
+        i <= n;
+        i++
+    ) {
+
+        result *= i;
+    }
+
+
+    return result;
+}
+
+
+/* ============================================================
+   TRIG FUNCTIONS
+   ============================================================ */
+
+function sin(x) {
+
+    if (angleMode === "DEG") {
+
+        return Math.sin(
+            x * Math.PI / 180
+        );
+    }
+
+    return Math.sin(x);
+}
+
+
+function cos(x) {
+
+    if (angleMode === "DEG") {
+
+        return Math.cos(
+            x * Math.PI / 180
+        );
+    }
+
+    return Math.cos(x);
+}
+
+
+function tan(x) {
+
+    if (angleMode === "DEG") {
+
+        return Math.tan(
+            x * Math.PI / 180
+        );
+    }
+
+    return Math.tan(x);
+}
+
+
+/* ============================================================
+   INVERSE TRIG
+   ============================================================ */
+
+function asin(x) {
+
+    let value = Math.asin(x);
+
+    if (angleMode === "DEG") {
+
+        value =
+            value * 180 / Math.PI;
+    }
+
+    return value;
+}
+
+
+function acos(x) {
+
+    let value = Math.acos(x);
+
+    if (angleMode === "DEG") {
+
+        value =
+            value * 180 / Math.PI;
+    }
+
+    return value;
+}
+
+
+function atan(x) {
+
+    let value = Math.atan(x);
+
+    if (angleMode === "DEG") {
+
+        value =
+            value * 180 / Math.PI;
+    }
+
+    return value;
+}
+
+
+/* ============================================================
+   SCIENTIFIC FUNCTION
+   ============================================================ */
+
+function scientific(type) {
+
+    try {
+
+
+        /* ----------------------------------------------------
+           FUNCTIONS THAT ADD TO EXPRESSION
+           ---------------------------------------------------- */
+
+        if (
+            type === "sin" ||
+            type === "cos" ||
+            type === "tan" ||
+            type === "asin" ||
+            type === "acos" ||
+            type === "atan" ||
+            type === "sinh" ||
+            type === "cosh" ||
+            type === "tanh"
+        ) {
+
+            let functionName = type;
+
+
+            if (
+                inverse &&
+                type === "sin"
+            ) {
+
+                functionName = "asin";
+
+            } else if (
+                inverse &&
+                type === "cos"
+            ) {
+
+                functionName = "acos";
+
+            } else if (
+                inverse &&
+                type === "tan"
+            ) {
+
+                functionName = "atan";
             }
-        )
-
-        st.session_state.history = (
-            st.session_state.history[:20]
-        )
-
-        st.session_state.error = ""
-
-    except ValueError as error:
-
-        st.session_state.error = str(error)
-        st.session_state.result = "Error"
 
 
-# ============================================================
-# SCIENTIFIC FUNCTIONS
-# ============================================================
+            expression +=
+                functionName + "(";
 
-def add_function(function):
+            updateDisplay();
 
-    if st.session_state.inverse:
-
-        inverse_functions = {
-            "sin": "asin",
-            "cos": "acos",
-            "tan": "atan"
+            return;
         }
 
-        function = inverse_functions.get(
-            function,
-            function
-        )
 
-    if function == "sqrt":
+        if (type === "ln") {
 
-        add_text("sqrt(")
+            expression += "ln(";
 
-    elif function == "ln":
+            updateDisplay();
 
-        add_text("log(")
+            return;
+        }
 
-    elif function == "log":
 
-        add_text("log10(")
+        if (type === "log") {
 
-    elif function == "log2":
+            expression += "log(";
 
-        add_text("log2(")
+            updateDisplay();
 
-    elif function in [
-        "sin",
-        "cos",
-        "tan",
-        "asin",
-        "acos",
-        "atan",
-        "sinh",
-        "cosh",
-        "tanh"
-    ]:
+            return;
+        }
 
-        add_text(
-            f"{function}("
-        )
 
-    elif function == "abs":
+        if (type === "log2") {
 
-        add_text("Abs(")
+            expression += "log2(";
 
-    elif function == "square":
+            updateDisplay();
 
-        if st.session_state.expression:
-            st.session_state.expression += "^2"
+            return;
+        }
 
-    elif function == "cube":
 
-        if st.session_state.expression:
-            st.session_state.expression += "^3"
+        if (type === "sqrt") {
 
-    elif function == "reciprocal":
+            expression += "sqrt(";
 
-        if st.session_state.expression:
-            st.session_state.expression = (
-                f"1/({st.session_state.expression})"
-            )
+            updateDisplay();
 
-    elif function == "cuberoot":
+            return;
+        }
 
-        add_text("real_root(")
 
-    elif function == "floor":
+        if (type === "cuberoot") {
 
-        add_text("floor(")
+            expression += "cbrt(";
 
-    elif function == "ceil":
+            updateDisplay();
 
-        add_text("ceiling(")
+            return;
+        }
 
-    elif function == "factorial":
 
-        if st.session_state.expression:
-            st.session_state.expression += "!"
+        /* ----------------------------------------------------
+           SQUARE
+           ---------------------------------------------------- */
 
-    elif function == "exp":
+        if (type === "square") {
 
-        add_text("E")
+            expression =
+                "(" +
+                expression +
+                ")^2";
 
-    st.session_state.error = ""
+            updateDisplay();
 
+            return;
+        }
 
-# ============================================================
-# DISPLAY
-# NO HTML WRAPPER AROUND STREAMLIT WIDGETS
-# ============================================================
 
-display_col1, display_col2 = st.columns(
-    [1, 8],
-    gap="small"
-)
+        /* ----------------------------------------------------
+           CUBE
+           ---------------------------------------------------- */
 
-with display_col1:
+        if (type === "cube") {
 
-    if st.button(
-        "↶",
-        key="history_toggle"
-    ):
+            expression =
+                "(" +
+                expression +
+                ")^3";
 
-        st.session_state.show_history = (
-            not st.session_state.show_history
-        )
+            updateDisplay();
 
-        st.rerun()
+            return;
+        }
 
 
-with display_col2:
+        /* ----------------------------------------------------
+           RECIPROCAL
+           ---------------------------------------------------- */
 
-    st.markdown(
-        f"""
-        <div class="display-box">
-            <div class="display-expression">
-                {st.session_state.expression or ""}
-            </div>
+        if (type === "reciprocal") {
 
-            <div class="display-result">
-                {st.session_state.error or st.session_state.result}
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+            expression =
+                "1/(" +
+                expression +
+                ")";
 
+            updateDisplay();
 
-# ============================================================
-# HISTORY
-# ============================================================
+            return;
+        }
 
-if st.session_state.show_history:
 
-    with st.expander(
-        "🕘 Calculation History",
-        expanded=True
-    ):
+        /* ----------------------------------------------------
+           ABS
+           ---------------------------------------------------- */
 
-        if st.session_state.history:
+        if (type === "abs") {
 
-            if st.button(
-                "Clear History",
-                key="clear_history"
-            ):
+            expression =
+                "abs(" +
+                expression +
+                ")";
 
-                st.session_state.history = []
-                st.rerun()
+            updateDisplay();
 
-            for index, item in enumerate(
-                st.session_state.history
-            ):
+            return;
+        }
 
-                st.write(
-                    f"**{item['expression']}** = "
-                    f"**{item['result']}**"
-                )
 
-                if st.button(
-                    "Use",
-                    key=f"use_history_{index}"
-                ):
+        /* ----------------------------------------------------
+           FLOOR
+           ---------------------------------------------------- */
 
-                    st.session_state.expression = (
-                        item["result"]
-                    )
+        if (type === "floor") {
 
-                    st.session_state.result = (
-                        item["result"]
-                    )
+            expression =
+                "floor(" +
+                expression +
+                ")";
 
-                    st.rerun()
+            updateDisplay();
 
-        else:
+            return;
+        }
 
-            st.info(
-                "No calculations yet."
-            )
 
+        /* ----------------------------------------------------
+           CEIL
+           ---------------------------------------------------- */
 
-# ============================================================
-# DEG / INV / MEMORY
-# EXACTLY 6 COLUMNS
-# ============================================================
+        if (type === "ceil") {
 
-mode_columns = st.columns(
-    6,
-    gap="small"
-)
+            expression =
+                "ceil(" +
+                expression +
+                ")";
 
+            updateDisplay();
 
-# DEG / RAD
-with mode_columns[0]:
+            return;
+        }
 
-    if st.button(
-        st.session_state.angle_mode,
-        key="angle_mode_btn"
-    ):
+    }
 
-        if st.session_state.angle_mode == "DEG":
-            st.session_state.angle_mode = "RAD"
-        else:
-            st.session_state.angle_mode = "DEG"
+    catch (error) {
 
-        st.rerun()
+        answer = "Error";
 
+        updateDisplay();
+    }
+}
 
-# INV
-with mode_columns[1]:
 
-    inv_text = (
-        "INV ✓"
-        if st.session_state.inverse
-        else "INV"
-    )
+/* ============================================================
+   EXPRESSION PREPARATION
+   ============================================================ */
 
-    if st.button(
-        inv_text,
-        key="inverse_btn"
-    ):
+function prepareExpression(expr) {
 
-        st.session_state.inverse = (
-            not st.session_state.inverse
-        )
+    let result = expr;
 
-        st.rerun()
 
+    /* Ans */
 
-# MC
-with mode_columns[2]:
+    result =
+        result.replace(
+            /Ans/g,
+            "(" + answer + ")"
+        );
 
-    if st.button(
-        "MC",
-        key="MC"
-    ):
 
-        st.session_state.memory = 0
+    /* Pi */
 
+    result =
+        result.replace(
+            /pi/g,
+            "Math.PI"
+        );
 
-# MR
-with mode_columns[3]:
 
-    if st.button(
-        "MR",
-        key="MR"
-    ):
+    /* e */
 
-        add_text(
-            str(st.session_state.memory)
-        )
+    result =
+        result.replace(
+            /(?<![a-zA-Z])e(?![a-zA-Z])/g,
+            "Math.E"
+        );
 
-        st.rerun()
 
+    /* Percentage */
 
-# M+
-with mode_columns[4]:
+    result =
+        result.replace(
+            /(\d+(?:\.\d+)?)%/g,
+            "($1/100)"
+        );
 
-    if st.button(
-        "M+",
-        key="Mplus"
-    ):
 
-        try:
+    /* Factorial */
 
-            value = calculate_expression(
-                st.session_state.expression
-            )
+    result =
+        result.replace(
+            /(\d+(?:\.\d+)?)!/g,
+            "factorialValue($1)"
+        );
 
-            st.session_state.memory += float(value)
 
-        except Exception:
-            pass
+    /* Square root */
 
+    result =
+        result.replace(
+            /sqrt\(/g,
+            "Math.sqrt("
+        );
 
-# M-
-with mode_columns[5]:
 
-    if st.button(
-        "M-",
-        key="Mminus"
-    ):
+    /* Cube root */
 
-        try:
+    result =
+        result.replace(
+            /cbrt\(/g,
+            "Math.cbrt("
+        );
 
-            value = calculate_expression(
-                st.session_state.expression
-            )
 
-            st.session_state.memory -= float(value)
+    /* Natural log */
 
-        except Exception:
-            pass
+    result =
+        result.replace(
+            /ln\(/g,
+            "Math.log("
+        );
 
 
-# ============================================================
-# FUNCTION TO CREATE 7-BUTTON ROW
-# ============================================================
+    /* Log base 10 */
 
-def button_row(row_number, buttons):
+    result =
+        result.replace(
+            /log\(/g,
+            "Math.log10("
+        );
 
-    # THIS IS A REAL STREAMLIT ROW
-    columns = st.columns(
-        7,
-        gap="small"
-    )
 
-    for index, (label, action) in enumerate(buttons):
+    /* Log base 2 */
 
-        with columns[index]:
+    result =
+        result.replace(
+            /log2\(/g,
+            "Math.log2("
+        );
 
-            key = f"row_{row_number}_button_{index}"
 
-            # AC
-            if action == "AC":
+    /* Absolute */
 
-                if st.button(
-                    label,
-                    key=key
-                ):
+    result =
+        result.replace(
+            /abs\(/g,
+            "Math.abs("
+        );
 
-                    clear_all()
-                    st.rerun()
 
-            # BACKSPACE
-            elif action == "DEL":
+    /* Floor */
 
-                if st.button(
-                    label,
-                    key=key
-                ):
+    result =
+        result.replace(
+            /floor\(/g,
+            "Math.floor("
+        );
 
-                    delete_last()
-                    st.rerun()
 
-            # EQUALS
-            elif action == "=":
+    /* Ceil */
 
-                if st.button(
-                    label,
-                    key=key
-                ):
+    result =
+        result.replace(
+            /ceil\(/g,
+            "Math.ceil("
+        );
 
-                    calculate()
-                    st.rerun()
 
-            # SCIENTIFIC FUNCTIONS
-            elif action in [
-                "factorial",
+    /* Trigonometry */
+
+    result =
+        result.replace(
+            /asin\(/g,
+            "asin("
+        );
+
+
+    result =
+        result.replace(
+            /acos\(/g,
+            "acos("
+        );
+
+
+    result =
+        result.replace(
+            /atan\(/g,
+            "atan("
+        );
+
+
+    result =
+        result.replace(
+            /sin\(/g,
+            "sin("
+        );
+
+
+    result =
+        result.replace(
+            /cos\(/g,
+            "cos("
+        );
+
+
+    result =
+        result.replace(
+            /tan\(/g,
+            "tan("
+        );
+
+
+    /* Hyperbolic */
+
+    result =
+        result.replace(
+            /sinh\(/g,
+            "Math.sinh("
+        );
+
+
+    result =
+        result.replace(
+            /cosh\(/g,
+            "Math.cosh("
+        );
+
+
+    result =
+        result.replace(
+            /tanh\(/g,
+            "Math.tanh("
+        );
+
+
+    /* Power */
+
+    result =
+        result.replace(
+            /\^/g,
+            "**"
+        );
+
+
+    return result;
+}
+
+
+/* ============================================================
+   CALCULATE
+   ============================================================ */
+
+function calculate() {
+
+    if (!expression) {
+
+        return;
+    }
+
+
+    try {
+
+        let original =
+            expression;
+
+
+        let prepared =
+            prepareExpression(
+                expression
+            );
+
+
+        let value =
+            Function(
+                "factorialValue",
                 "sin",
                 "cos",
                 "tan",
-                "sqrt",
-                "ln",
-                "log",
-                "exp"
-            ]:
+                "asin",
+                "acos",
+                "atan",
+                "return (" +
+                prepared +
+                ")"
+            )(
+                factorialValue,
+                sin,
+                cos,
+                tan,
+                asin,
+                acos,
+                atan
+            );
 
-                if st.button(
-                    label,
-                    key=key
-                ):
 
-                    add_function(action)
-                    st.rerun()
+        if (
+            typeof value !== "number" ||
+            !Number.isFinite(value)
+        ) {
 
-            # NORMAL BUTTON
-            else:
+            throw new Error(
+                "Invalid result"
+            );
+        }
 
-                if st.button(
-                    label,
-                    key=key
-                ):
 
-                    add_text(action)
-                    st.rerun()
+        /* Clean tiny floating point errors */
+
+        if (
+            Math.abs(value) <
+            1e-12
+        ) {
+
+            value = 0;
+        }
+
+
+        /* Round */
+
+        value =
+            Number(
+                value.toPrecision(12)
+            );
+
+
+        answer =
+            value;
+
+
+        history.unshift({
+
+            expression:
+                original,
+
+            result:
+                value
+
+        });
+
+
+        if (history.length > 20) {
+
+            history.pop();
+        }
+
+
+        updateHistory();
+
+        updateDisplay();
+
+    }
+
+    catch (error) {
+
+        answer = "Error";
+
+        updateDisplay();
+    }
+}
+
+
+/* ============================================================
+   MEMORY
+   ============================================================ */
+
+function memoryClear() {
+
+    memory = 0;
+}
+
+
+function memoryRecall() {
+
+    expression +=
+        String(memory);
+
+    updateDisplay();
+}
+
+
+function memoryAdd() {
+
+    try {
+
+        calculate();
+
+        if (
+            typeof answer === "number"
+        ) {
+
+            memory += answer;
+        }
+
+    }
+
+    catch (error) {
+
+        // Ignore invalid memory operation
+    }
+}
+
+
+function memorySubtract() {
+
+    try {
+
+        calculate();
+
+        if (
+            typeof answer === "number"
+        ) {
+
+            memory -= answer;
+        }
+
+    }
+
+    catch (error) {
+
+        // Ignore invalid memory operation
+    }
+}
+
+
+/* ============================================================
+   HISTORY
+   ============================================================ */
+
+function toggleHistory() {
+
+    let historyBox =
+        document.getElementById(
+            "history"
+        );
+
+
+    if (
+        historyBox.style.display ===
+        "block"
+    ) {
+
+        historyBox.style.display =
+            "none";
+
+    } else {
+
+        historyBox.style.display =
+            "block";
+
+        updateHistory();
+    }
+}
+
+
+function updateHistory() {
+
+    let historyBox =
+        document.getElementById(
+            "history"
+        );
+
+
+    if (history.length === 0) {
+
+        historyBox.innerHTML =
+            "No calculations yet.";
+
+        return;
+    }
+
+
+    historyBox.innerHTML = "";
+
+
+    history.forEach(
+        function(item) {
+
+            let div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.className =
+                "history-item";
+
+
+            div.textContent =
+                item.expression +
+                " = " +
+                item.result;
+
+
+            historyBox.appendChild(
+                div
+            );
+        }
+    );
+}
+
+
+/* ============================================================
+   MORE FUNCTIONS
+   ============================================================ */
+
+function toggleMore() {
+
+    let box =
+        document.getElementById(
+            "moreFunctions"
+        );
+
+
+    if (
+        box.style.display ===
+        "none"
+    ) {
+
+        box.style.display =
+            "grid";
+
+    } else {
+
+        box.style.display =
+            "none";
+    }
+}
+
+
+/* ============================================================
+   KEYBOARD SUPPORT
+   ============================================================ */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        let key =
+            event.key;
+
+
+        if (
+            /^[0-9.]$/.test(key)
+        ) {
+
+            add(key);
+
+            return;
+        }
+
+
+        if (
+            ["+", "-", "*", "/", "(", ")", "^"]
+            .includes(key)
+        ) {
+
+            add(key);
+
+            return;
+        }
+
+
+        if (key === "Enter") {
+
+            calculate();
+
+            return;
+        }
+
+
+        if (key === "Backspace") {
+
+            backspace();
+
+            return;
+        }
+
+
+        if (key === "Escape") {
+
+            clearAll();
+
+            return;
+        }
+
+    }
+);
+
+
+/* ============================================================
+   INITIAL DISPLAY
+   ============================================================ */
+
+updateDisplay();
+
+</script>
+
+</body>
+
+</html>
+"""
 
 
 # ============================================================
-# ROW 1
+# RENDER
 # ============================================================
 
-button_row(
-    1,
-    [
-        ("x!", "factorial"),
-        ("(", "("),
-        (")", ")"),
-        ("%", "%"),
-        ("AC", "AC"),
-        ("⌫", "DEL"),
-        ("÷", "÷")
-    ]
-)
-
-
-# ============================================================
-# ROW 2
-# ============================================================
-
-button_row(
-    2,
-    [
-        ("sin", "sin"),
-        ("ln", "ln"),
-        ("7", "7"),
-        ("8", "8"),
-        ("9", "9"),
-        ("×", "×"),
-        ("√", "sqrt")
-    ]
-)
-
-
-# ============================================================
-# ROW 3
-# ============================================================
-
-button_row(
-    3,
-    [
-        ("cos", "cos"),
-        ("log", "log"),
-        ("4", "4"),
-        ("5", "5"),
-        ("6", "6"),
-        ("−", "−"),
-        ("π", "π")
-    ]
-)
-
-
-# ============================================================
-# ROW 4
-# ============================================================
-
-button_row(
-    4,
-    [
-        ("tan", "tan"),
-        ("e", "e"),
-        ("1", "1"),
-        ("2", "2"),
-        ("3", "3"),
-        ("+", "+"),
-        ("Ans", "Ans")
-    ]
-)
-
-
-# ============================================================
-# ROW 5
-# ============================================================
-
-button_row(
-    5,
-    [
-        ("EXP", "exp"),
-        ("xʸ", "^"),
-        ("0", "0"),
-        (".", "."),
-        ("=", "="),
-        ("(", "("),
-        (")", ")")
-    ]
-)
-
-
-# ============================================================
-# MORE FUNCTIONS
-# 4 COLUMNS
-# ============================================================
-
-st.divider()
-
-with st.expander(
-    "⚙️ More Scientific Functions"
-):
-
-    more_buttons = [
-        ("asin", "asin"),
-        ("acos", "acos"),
-        ("atan", "atan"),
-        ("sinh", "sinh"),
-
-        ("cosh", "cosh"),
-        ("tanh", "tanh"),
-        ("log₂", "log2"),
-        ("1/x", "reciprocal"),
-
-        ("x²", "square"),
-        ("x³", "cube"),
-        ("∛x", "cuberoot"),
-        ("|x|", "abs"),
-
-        ("floor", "floor"),
-        ("ceil", "ceil")
-    ]
-
-    more_columns = st.columns(
-        4,
-        gap="small"
-    )
-
-    for index, (label, action) in enumerate(
-        more_buttons
-    ):
-
-        with more_columns[index % 4]:
-
-            if st.button(
-                label,
-                key=f"more_{index}"
-            ):
-
-                add_function(action)
-                st.rerun()
-
-
-# ============================================================
-# FOOTER
-# ============================================================
-
-st.caption(
-    "⌨️ Keyboard: numbers, +, -, *, /, "
-    "parentheses, Enter = calculate, "
-    "Backspace = delete"
-)
-
-st.caption(
-    "🧮 Scientific Calculator • "
-    "Python + Streamlit + SymPy"
+components.html(
+    calculator_html,
+    height=650,
+    scrolling=False
 )
