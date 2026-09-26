@@ -24,11 +24,17 @@ st.markdown("""
 <style>
 
 /* ==========================================================
-   REMOVE STREAMLIT DEFAULT UI
+   HIDE STREAMLIT DEFAULT UI
    ========================================================== */
 
-#MainMenu,
-footer,
+#MainMenu {
+    visibility: hidden;
+}
+
+footer {
+    visibility: hidden;
+}
+
 header {
     visibility: hidden;
 }
@@ -45,9 +51,9 @@ header {
 .block-container {
     max-width: 760px !important;
     padding-top: 10px !important;
+    padding-bottom: 20px !important;
     padding-left: 8px !important;
     padding-right: 8px !important;
-    padding-bottom: 20px !important;
 }
 
 
@@ -58,8 +64,7 @@ header {
 .calculator {
     width: 100%;
     max-width: 760px;
-    margin: 0 auto;
-    box-sizing: border-box;
+    margin: auto;
 }
 
 
@@ -70,22 +75,29 @@ header {
 .display-box {
     width: 100%;
     box-sizing: border-box;
+
     border: 1px solid #d1d5db;
     border-radius: 18px;
+
     padding: 8px 14px;
     margin-bottom: 7px;
+
     background: white;
+
     overflow: hidden;
 }
 
 .display-expression {
     width: 100%;
-    box-sizing: border-box;
+
     text-align: right;
+
     font-size: 18px;
     min-height: 26px;
     line-height: 26px;
+
     color: #4b5563;
+
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -93,12 +105,15 @@ header {
 
 .display-result {
     width: 100%;
-    box-sizing: border-box;
+
     text-align: right;
+
     font-size: 32px;
     min-height: 42px;
     line-height: 42px;
+
     color: #111827;
+
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -106,32 +121,27 @@ header {
 
 
 /* ==========================================================
-   REMOVE STREAMLIT COLUMN MINIMUM WIDTH
+   NORMAL STREAMLIT COLUMNS
    ========================================================== */
 
-[data-testid="stHorizontalBlock"] {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-}
+/*
+   IMPORTANT:
+   We DO NOT change stHorizontalBlock to grid.
+   Streamlit columns are used normally.
+*/
 
 [data-testid="column"] {
-    min-width: 0 !important;
-    width: auto !important;
     padding: 0 !important;
-    margin: 0 !important;
-    box-sizing: border-box !important;
+    min-width: 0 !important;
 }
 
 
 /* ==========================================================
-   ALL BUTTONS
+   BUTTONS
    ========================================================== */
 
 .stButton {
     width: 100% !important;
-    min-width: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
 }
@@ -139,7 +149,6 @@ header {
 .stButton > button {
     width: 100% !important;
     min-width: 0 !important;
-    max-width: 100% !important;
 
     height: 44px !important;
     min-height: 44px !important;
@@ -150,11 +159,11 @@ header {
     border-radius: 22px;
     border: none;
 
-    font-size: 13px;
-    font-weight: 500;
-
     background-color: #f1f3f4;
     color: #111827;
+
+    font-size: 13px;
+    font-weight: 500;
 
     white-space: nowrap;
     overflow: hidden;
@@ -164,166 +173,36 @@ header {
 }
 
 .stButton > button:hover {
-    border: none;
     background-color: #e5e7eb;
+    border: none;
 }
 
 
 /* ==========================================================
-   TOP HISTORY BUTTON
+   BUTTON ROW SPACING
    ========================================================== */
 
-.display-box [data-testid="stHorizontalBlock"] {
-    display: flex !important;
-    width: 100% !important;
-    gap: 6px !important;
-    margin: 0 0 4px 0 !important;
-}
-
-.display-box [data-testid="column"]:first-child {
-    flex: 0 0 55px !important;
-    width: 55px !important;
-}
-
-.display-box [data-testid="column"]:last-child {
-    flex: 1 1 auto !important;
+.keypad-row {
+    margin-bottom: 5px;
 }
 
 
 /* ==========================================================
-   MODE / MEMORY ROW
+   MODE / MEMORY BUTTONS
    ========================================================== */
 
 .mode-row {
-    width: 100%;
     margin-top: 2px;
-    margin-bottom: 5px;
-    overflow: hidden;
-}
-
-.mode-row [data-testid="stHorizontalBlock"] {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    width: 100% !important;
-    gap: 4px !important;
-    margin: 0 !important;
-}
-
-.mode-row [data-testid="column"] {
-    flex: 1 1 0 !important;
-    width: 0 !important;
-    min-width: 0 !important;
+    margin-bottom: 6px;
 }
 
 .mode-row .stButton > button {
     height: 37px !important;
     min-height: 37px !important;
+
     border-radius: 19px;
+
     font-size: 11px;
-}
-
-
-/* ==========================================================
-   REAL CALCULATOR GRID
-   ========================================================== */
-
-.calculator-grid {
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-
-    display: block !important;
-
-    overflow: hidden !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-
-/*
-   IMPORTANT:
-
-   Each calculator row is still created by Streamlit,
-   but CSS forces EXACTLY 7 equal columns.
-*/
-
-.calculator-grid [data-testid="stHorizontalBlock"] {
-    display: grid !important;
-
-    grid-template-columns:
-        repeat(7, minmax(0, 1fr)) !important;
-
-    width: 100% !important;
-    max-width: 100% !important;
-
-    gap: 4px !important;
-
-    margin: 0 0 4px 0 !important;
-    padding: 0 !important;
-
-    box-sizing: border-box !important;
-
-    overflow: hidden !important;
-}
-
-
-/* Every column becomes one grid cell */
-
-.calculator-grid [data-testid="column"] {
-    display: block !important;
-
-    width: auto !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-
-    flex: none !important;
-
-    padding: 0 !important;
-    margin: 0 !important;
-
-    box-sizing: border-box !important;
-}
-
-
-/* Buttons inside calculator */
-
-.calculator-grid .stButton {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-}
-
-.calculator-grid .stButton > button {
-    width: 100% !important;
-    max-width: 100% !important;
-
-    height: 44px !important;
-    min-height: 44px !important;
-
-    border-radius: 22px;
-
-    font-size: 13px;
-
-    box-sizing: border-box !important;
-}
-
-
-/* ==========================================================
-   BUTTON TYPES
-   ========================================================== */
-
-.scientific-btn .stButton > button {
-    background-color: #e7eefc;
-}
-
-.operator-btn .stButton > button {
-    background-color: #e7eefc;
-}
-
-.equals-btn .stButton > button {
-    background-color: #3478f6;
-    color: white;
 }
 
 
@@ -331,79 +210,22 @@ header {
    MORE FUNCTIONS
    ========================================================== */
 
-.more-box {
-    width: 100%;
-    margin-top: 5px;
-    overflow: hidden;
-}
-
-.more-box [data-testid="stHorizontalBlock"] {
-    display: grid !important;
-
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr)) !important;
-
-    gap: 4px !important;
-
-    width: 100% !important;
-    max-width: 100% !important;
-
-    margin-bottom: 4px !important;
-
-    overflow: hidden !important;
-}
-
-.more-box [data-testid="column"] {
-    min-width: 0 !important;
-    width: auto !important;
-    flex: none !important;
-    padding: 0 !important;
-}
-
 .more-box .stButton > button {
     height: 38px !important;
     min-height: 38px !important;
+
     border-radius: 19px;
+
     font-size: 11px;
 }
 
 
 /* ==========================================================
-   HISTORY
-   ========================================================== */
-
-.history-card {
-    padding: 7px 10px;
-    border-bottom: 1px solid #eeeeee;
-}
-
-.history-expression {
-    color: #6b7280;
-    font-size: 12px;
-}
-
-.history-result {
-    font-size: 17px;
-    font-weight: 600;
-}
-
-
-/* ==========================================================
-   DIVIDERS
+   DIVIDER
    ========================================================== */
 
 hr {
     margin: 7px 0 !important;
-}
-
-
-/* ==========================================================
-   CAPTIONS
-   ========================================================== */
-
-.stCaption {
-    margin-top: 2px !important;
-    margin-bottom: 2px !important;
 }
 
 
@@ -415,19 +237,13 @@ hr {
 
     .block-container {
         width: 100% !important;
-        max-width: 100% !important;
 
         padding-left: 4px !important;
         padding-right: 4px !important;
-
-        overflow-x: hidden !important;
     }
 
     .calculator {
         width: 100% !important;
-        max-width: 100% !important;
-
-        overflow-x: hidden !important;
     }
 
 
@@ -452,11 +268,7 @@ hr {
     }
 
 
-    /* Mode row */
-
-    .mode-row [data-testid="stHorizontalBlock"] {
-        gap: 3px !important;
-    }
+    /* Mode buttons */
 
     .mode-row .stButton > button {
         height: 33px !important;
@@ -468,48 +280,23 @@ hr {
     }
 
 
-    /* Calculator */
+    /* Calculator buttons */
 
-    .calculator-grid {
-        width: 100% !important;
-        max-width: 100% !important;
-        overflow: hidden !important;
+    .keypad-row {
+        margin-bottom: 3px;
     }
 
-    .calculator-grid [data-testid="stHorizontalBlock"] {
-        grid-template-columns:
-            repeat(7, minmax(0, 1fr)) !important;
-
-        gap: 3px !important;
-
-        margin-bottom: 3px !important;
-
-        width: 100% !important;
-        max-width: 100% !important;
-
-        overflow: hidden !important;
-    }
-
-    .calculator-grid .stButton > button {
+    .keypad-row .stButton > button {
         height: 39px !important;
         min-height: 39px !important;
 
         border-radius: 20px;
 
         font-size: 11px !important;
-
-        padding: 0 !important;
     }
 
 
     /* More functions */
-
-    .more-box [data-testid="stHorizontalBlock"] {
-        grid-template-columns:
-            repeat(4, minmax(0, 1fr)) !important;
-
-        gap: 3px !important;
-    }
 
     .more-box .stButton > button {
         height: 34px !important;
@@ -518,18 +305,6 @@ hr {
         border-radius: 17px;
 
         font-size: 10px !important;
-    }
-
-
-    /* Prevent horizontal overflow */
-
-    .stApp,
-    .main,
-    section,
-    [data-testid="stAppViewContainer"],
-    [data-testid="stMainBlockContainer"] {
-        max-width: 100% !important;
-        overflow-x: hidden !important;
     }
 }
 
@@ -545,24 +320,8 @@ hr {
         padding-right: 2px !important;
     }
 
-    .calculator {
-        padding: 0 !important;
-    }
-
-    .display-box {
-        padding-left: 7px;
-        padding-right: 7px;
-    }
-
     .display-result {
         font-size: 24px;
-    }
-
-
-    /* Mode row */
-
-    .mode-row [data-testid="stHorizontalBlock"] {
-        gap: 2px !important;
     }
 
     .mode-row .stButton > button {
@@ -572,18 +331,11 @@ hr {
         font-size: 8px !important;
     }
 
-
-    /* Main calculator */
-
-    .calculator-grid [data-testid="stHorizontalBlock"] {
-        grid-template-columns:
-            repeat(7, minmax(0, 1fr)) !important;
-
-        gap: 2px !important;
-        margin-bottom: 2px !important;
+    .keypad-row {
+        margin-bottom: 2px;
     }
 
-    .calculator-grid .stButton > button {
+    .keypad-row .stButton > button {
         height: 35px !important;
         min-height: 35px !important;
 
@@ -592,19 +344,9 @@ hr {
         font-size: 9px !important;
     }
 
-
-    /* More functions */
-
-    .more-box [data-testid="stHorizontalBlock"] {
-        grid-template-columns:
-            repeat(4, minmax(0, 1fr)) !important;
-
-        gap: 2px !important;
-    }
-
     .more-box .stButton > button {
-        height: 32px !important;
-        min-height: 32px !important;
+        height: 31px !important;
+        min-height: 31px !important;
 
         font-size: 9px !important;
     }
@@ -631,6 +373,7 @@ defaults = {
 }
 
 for key, value in defaults.items():
+
     if key not in st.session_state:
         st.session_state[key] = value
 
@@ -722,9 +465,7 @@ def calculate_expression(expression):
         expr = prepare_expression(expression)
 
 
-        # ----------------------------------------------------
         # FACTORIAL
-        # ----------------------------------------------------
 
         factorial_pattern = r"(\d+(?:\.\d+)?)!"
 
@@ -743,38 +484,28 @@ def calculate_expression(expression):
         )
 
 
-        # ----------------------------------------------------
         # ALLOWED FUNCTIONS
-        # ----------------------------------------------------
 
         allowed = {
 
             "pi": sp.pi,
-
             "E": sp.E,
 
             "sqrt": sp.sqrt,
 
             "sin": sp.sin,
-
             "cos": sp.cos,
-
             "tan": sp.tan,
 
             "asin": sp.asin,
-
             "acos": sp.acos,
-
             "atan": sp.atan,
 
             "sinh": sp.sinh,
-
             "cosh": sp.cosh,
-
             "tanh": sp.tanh,
 
             "log": sp.log,
-
             "log10": sp.log,
 
             "log2": lambda x:
@@ -783,47 +514,54 @@ def calculate_expression(expression):
             "Abs": sp.Abs,
 
             "floor": sp.floor,
-
             "ceiling": sp.ceiling,
 
             "real_root": sp.real_root,
         }
 
 
-        # ----------------------------------------------------
         # DEGREE MODE
-        # ----------------------------------------------------
 
         if st.session_state.angle_mode == "DEG":
 
             allowed["sin"] = lambda x: (
-                sp.sin(sp.pi * x / 180)
+                sp.sin(
+                    sp.pi * x / 180
+                )
             )
 
             allowed["cos"] = lambda x: (
-                sp.cos(sp.pi * x / 180)
+                sp.cos(
+                    sp.pi * x / 180
+                )
             )
 
             allowed["tan"] = lambda x: (
-                sp.tan(sp.pi * x / 180)
+                sp.tan(
+                    sp.pi * x / 180
+                )
             )
 
             allowed["asin"] = lambda x: (
-                sp.asin(x) * 180 / sp.pi
+                sp.asin(x)
+                * 180
+                / sp.pi
             )
 
             allowed["acos"] = lambda x: (
-                sp.acos(x) * 180 / sp.pi
+                sp.acos(x)
+                * 180
+                / sp.pi
             )
 
             allowed["atan"] = lambda x: (
-                sp.atan(x) * 180 / sp.pi
+                sp.atan(x)
+                * 180
+                / sp.pi
             )
 
 
-        # ----------------------------------------------------
         # SYMPIFY
-        # ----------------------------------------------------
 
         result = sp.sympify(
             expr,
@@ -833,9 +571,7 @@ def calculate_expression(expression):
         result = sp.N(result)
 
 
-        # ----------------------------------------------------
         # INVALID RESULTS
-        # ----------------------------------------------------
 
         if result.has(
             sp.zoo,
@@ -843,6 +579,7 @@ def calculate_expression(expression):
             -sp.oo,
             sp.nan
         ):
+
             raise ValueError(
                 "Invalid mathematical result"
             )
@@ -852,14 +589,13 @@ def calculate_expression(expression):
 
 
         if not math.isfinite(numeric_result):
+
             raise ValueError(
                 "Invalid mathematical result"
             )
 
 
-        # ----------------------------------------------------
         # CLEAN RESULT
-        # ----------------------------------------------------
 
         if numeric_result.is_integer():
 
@@ -896,22 +632,25 @@ def calculate_expression(expression):
 def add_text(text):
 
     st.session_state.expression += text
+
     st.session_state.error = ""
 
 
 # ============================================================
-# CLEAR ALL
+# CLEAR
 # ============================================================
 
 def clear_all():
 
     st.session_state.expression = ""
+
     st.session_state.result = "0"
+
     st.session_state.error = ""
 
 
 # ============================================================
-# DELETE LAST CHARACTER
+# DELETE
 # ============================================================
 
 def delete_last():
@@ -944,16 +683,14 @@ def calculate():
 
         try:
 
-            st.session_state.ans = float(result)
+            st.session_state.ans = float(
+                result
+            )
 
         except Exception:
 
             st.session_state.ans = 0
 
-
-        # ----------------------------------------------------
-        # HISTORY
-        # ----------------------------------------------------
 
         st.session_state.history.insert(
             0,
@@ -988,9 +725,7 @@ def add_function(function):
         inverse_functions = {
 
             "sin": "asin",
-
             "cos": "acos",
-
             "tan": "atan"
         }
 
@@ -1237,7 +972,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
 mode_col, inv_col, mc_col, mr_col, mp_col, mm_col = (
     st.columns(
         6,
@@ -1245,10 +979,6 @@ mode_col, inv_col, mc_col, mr_col, mp_col, mm_col = (
     )
 )
 
-
-# ============================================================
-# DEG / RAD
-# ============================================================
 
 with mode_col:
 
@@ -1267,10 +997,6 @@ with mode_col:
 
         st.rerun()
 
-
-# ============================================================
-# INV
-# ============================================================
 
 with inv_col:
 
@@ -1292,10 +1018,6 @@ with inv_col:
         st.rerun()
 
 
-# ============================================================
-# MC
-# ============================================================
-
 with mc_col:
 
     if st.button(
@@ -1306,10 +1028,6 @@ with mc_col:
         st.session_state.memory = 0
 
 
-# ============================================================
-# MR
-# ============================================================
-
 with mr_col:
 
     if st.button(
@@ -1318,15 +1036,13 @@ with mr_col:
     ):
 
         add_text(
-            str(st.session_state.memory)
+            str(
+                st.session_state.memory
+            )
         )
 
         st.rerun()
 
-
-# ============================================================
-# M+
-# ============================================================
 
 with mp_col:
 
@@ -1349,10 +1065,6 @@ with mp_col:
 
             pass
 
-
-# ============================================================
-# M-
-# ============================================================
 
 with mm_col:
 
@@ -1383,74 +1095,16 @@ st.markdown(
 
 
 # ============================================================
-# MAIN BUTTONS
+# FUNCTION TO CREATE ONE REAL ROW
 # ============================================================
 
-buttons = [
+def create_button_row(row_number, buttons):
 
-    [
-        ("x!", "factorial"),
-        ("(", "("),
-        (")", ")"),
-        ("%", "%"),
-        ("AC", "AC"),
-        ("⌫", "DEL"),
-        ("÷", "÷"),
-    ],
+    """
+    Creates ONE separate Streamlit row.
 
-    [
-        ("sin", "sin"),
-        ("ln", "ln"),
-        ("7", "7"),
-        ("8", "8"),
-        ("9", "9"),
-        ("×", "×"),
-        ("√", "sqrt"),
-    ],
-
-    [
-        ("cos", "cos"),
-        ("log", "log"),
-        ("4", "4"),
-        ("5", "5"),
-        ("6", "6"),
-        ("−", "-"),
-        ("π", "π"),
-    ],
-
-    [
-        ("tan", "tan"),
-        ("e", "e"),
-        ("1", "1"),
-        ("2", "2"),
-        ("3", "3"),
-        ("+", "+"),
-        ("Ans", "Ans"),
-    ],
-
-    [
-        ("EXP", "exp"),
-        ("xʸ", "^"),
-        ("0", "0"),
-        (".", "."),
-        ("=", "="),
-        ("(", "("),
-        (")", ")"),
-    ],
-]
-
-
-# ============================================================
-# CALCULATOR GRID
-# ============================================================
-
-st.markdown(
-    '<div class="calculator-grid">',
-    unsafe_allow_html=True
-)
-
-
-for row_index, row in enumerate(buttons):
+    Every row has exactly 7 columns.
+    """
 
     columns = st.columns(
         7,
@@ -1458,24 +1112,24 @@ for row_index, row in enumerate(buttons):
     )
 
 
-    for col_index, (label, action) in enumerate(row):
+    for column_index, (label, action) in enumerate(
+        buttons
+    ):
 
-        with columns[col_index]:
+        with columns[column_index]:
 
-            button_key = (
-                f"button_{row_index}_{col_index}"
+            key = (
+                f"calc_{row_number}_{column_index}"
             )
 
 
-            # ------------------------------------------------
             # AC
-            # ------------------------------------------------
 
             if action == "AC":
 
                 if st.button(
                     label,
-                    key=button_key
+                    key=key
                 ):
 
                     clear_all()
@@ -1483,15 +1137,13 @@ for row_index, row in enumerate(buttons):
                     st.rerun()
 
 
-            # ------------------------------------------------
             # DELETE
-            # ------------------------------------------------
 
             elif action == "DEL":
 
                 if st.button(
                     label,
-                    key=button_key
+                    key=key
                 ):
 
                     delete_last()
@@ -1499,15 +1151,13 @@ for row_index, row in enumerate(buttons):
                     st.rerun()
 
 
-            # ------------------------------------------------
             # EQUALS
-            # ------------------------------------------------
 
             elif action == "=":
 
                 if st.button(
                     label,
-                    key=button_key
+                    key=key
                 ):
 
                     calculate()
@@ -1515,15 +1165,13 @@ for row_index, row in enumerate(buttons):
                     st.rerun()
 
 
-            # ------------------------------------------------
             # ANSWER
-            # ------------------------------------------------
 
             elif action == "Ans":
 
                 if st.button(
                     label,
-                    key=button_key
+                    key=key
                 ):
 
                     add_text("Ans")
@@ -1531,9 +1179,7 @@ for row_index, row in enumerate(buttons):
                     st.rerun()
 
 
-            # ------------------------------------------------
-            # SCIENTIFIC
-            # ------------------------------------------------
+            # SCIENTIFIC FUNCTIONS
 
             elif action in [
 
@@ -1550,7 +1196,7 @@ for row_index, row in enumerate(buttons):
 
                 if st.button(
                     label,
-                    key=button_key
+                    key=key
                 ):
 
                     add_function(action)
@@ -1558,15 +1204,13 @@ for row_index, row in enumerate(buttons):
                     st.rerun()
 
 
-            # ------------------------------------------------
-            # NORMAL
-            # ------------------------------------------------
+            # NORMAL BUTTON
 
             else:
 
                 if st.button(
                     label,
-                    key=button_key
+                    key=key
                 ):
 
                     add_text(action)
@@ -1574,9 +1218,98 @@ for row_index, row in enumerate(buttons):
                     st.rerun()
 
 
-st.markdown(
-    "</div>",
-    unsafe_allow_html=True
+# ============================================================
+# MAIN SCIENTIFIC CALCULATOR
+# ============================================================
+
+
+# ------------------------------------------------------------
+# ROW 1
+# ------------------------------------------------------------
+
+create_button_row(
+    1,
+    [
+        ("x!", "factorial"),
+        ("(", "("),
+        (")", ")"),
+        ("%", "%"),
+        ("AC", "AC"),
+        ("⌫", "DEL"),
+        ("÷", "÷"),
+    ]
+)
+
+
+# ------------------------------------------------------------
+# ROW 2
+# ------------------------------------------------------------
+
+create_button_row(
+    2,
+    [
+        ("sin", "sin"),
+        ("ln", "ln"),
+        ("7", "7"),
+        ("8", "8"),
+        ("9", "9"),
+        ("×", "×"),
+        ("√", "sqrt"),
+    ]
+)
+
+
+# ------------------------------------------------------------
+# ROW 3
+# ------------------------------------------------------------
+
+create_button_row(
+    3,
+    [
+        ("cos", "cos"),
+        ("log", "log"),
+        ("4", "4"),
+        ("5", "5"),
+        ("6", "6"),
+        ("−", "-"),
+        ("π", "π"),
+    ]
+)
+
+
+# ------------------------------------------------------------
+# ROW 4
+# ------------------------------------------------------------
+
+create_button_row(
+    4,
+    [
+        ("tan", "tan"),
+        ("e", "e"),
+        ("1", "1"),
+        ("2", "2"),
+        ("3", "3"),
+        ("+", "+"),
+        ("Ans", "Ans"),
+    ]
+)
+
+
+# ------------------------------------------------------------
+# ROW 5
+# ------------------------------------------------------------
+
+create_button_row(
+    5,
+    [
+        ("EXP", "exp"),
+        ("xʸ", "^"),
+        ("0", "0"),
+        (".", "."),
+        ("=", "="),
+        ("(", "("),
+        (")", ")"),
+    ]
 )
 
 
@@ -1589,12 +1322,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
 st.markdown(
     '<div class="more-box">',
     unsafe_allow_html=True
 )
-
 
 with st.expander(
     "⚙️ More Scientific Functions"
@@ -1606,14 +1337,17 @@ with st.expander(
         ("acos", "acos"),
         ("atan", "atan"),
         ("sinh", "sinh"),
+
         ("cosh", "cosh"),
         ("tanh", "tanh"),
         ("log₂", "log2"),
         ("1/x", "reciprocal"),
+
         ("x²", "square"),
         ("x³", "cube"),
         ("∛x", "cuberoot"),
         ("|x|", "abs"),
+
         ("floor", "floor"),
         ("ceil", "ceil"),
     ]
@@ -1648,7 +1382,7 @@ st.markdown(
 
 
 # ============================================================
-# KEYBOARD INFORMATION
+# INFORMATION
 # ============================================================
 
 st.markdown(
@@ -1656,13 +1390,11 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
 st.caption(
     "⌨️ Keyboard: numbers, +, -, *, /, "
     "parentheses, Enter = calculate, "
     "Backspace = delete, Esc = clear"
 )
-
 
 st.caption(
     "🧮 Scientific Calculator • "
